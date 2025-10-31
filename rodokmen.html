@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodokmen rodiny</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            overflow-y: auto; /* --- ZMĚNA: Povolit vertikální posun --- */
+            overflow-x: hidden; /* --- NOVÉ: Zabránit horizontálnímu posunu --- */
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+            box-sizing: border-box; 
+            text-align: center; 
+        }
+
+        .page-wrapper h1 {
+            font-size: 32px;
+            color: #5C4033; 
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .page-wrapper .instructions {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .chart-container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            font-size: 10px;
+        }
+
+        /* ----- Styly pro buňky rodokmenu ----- */
+        .ancestor-cell {
+            fill: #ffffff;
+            stroke: #aaa;
+            stroke-width: 0.5;
+            transition: fill 0.2s ease-in-out;
+        }
+        
+        .ancestor-group {
+             cursor: pointer;
+        }
+
+        .ancestor-group:hover .ancestor-cell {
+            fill: #e0f7fa;
+        }
+
+        .ancestor-text {
+            fill: #222;
+            /* text-anchor: middle; */ /* Nyní se nastavuje v JS */
+            dominant-baseline: middle;
+            pointer-events: none;
+            font-size: 8px;
+            font-weight: 500;
+        }
+
+        /* Barevné odlišení generací */
+        .gen-1 .ancestor-cell { fill: #fffde7; }
+        .gen-2 .ancestor-cell { fill: #fcf8e3; }
+        .gen-3 .ancestor-cell { fill: #f9f3d0; }
+        .gen-4 .ancestor-cell { fill: #f5eecb; }
+        .gen-5 .ancestor-cell { fill: #f0e9c4; }
+        .gen-6 .ancestor-cell { fill: #ebe5be; }
+        
+        .ancestor-group:hover .ancestor-cell {
+            fill: #0097a7;
+        }
+        .ancestor-group:hover .ancestor-text {
+            fill: white;
+            font-weight: bold;
+        }
+        
+        /* ----- Styly pro modální okno (beze změny) ----- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex; 
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 25px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .modal-content h2 {
+            margin-top: 0;
+            color: #5C4033; 
+        }
+        
+        .modal-content p {
+            line-height: 1.6;
+            font-size: 16px;
+            display: none; 
+        }
+        
+        .modal-content p strong {
+            display: inline-block;
+            min-width: 130px; 
+            color: #555;
+        }
+        
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 10px; 
+        }
+        
+        .modal-button {
+            display: inline-block; 
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #8B4513; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .modal-button:hover {
+            background-color: #6B350F; 
+        }
+        
+        .modal-button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <h1>Rodokmen rodiny</h1>
+        <p class="instructions">Kliknutím na kterýkoli segment zobrazíte detailní informace o osobě.</p>
+
+        <div class="chart-container">
+            <svg id="fan-chart" viewBox="0 0 1000 520"></svg>
+        </div>
+    </div>
+
+    <!-- ----- HTML Modálního okna (beze změny) ----- -->
+    <div id="person-modal" class="modal">
+        <div class="modal-content">
+            <span id="modal-close-btn" class="modal-close">&times;</span>
+            
+            <h2 id="modal-name">Jméno osoby</h2>
+            
+            <p id="modal-row-birth"><strong class.text-gray-500>Narození:</strong> <span id="modal-birth"></span></p>
+            <p id="modal-row-marriage"><strong class="text-gray-500>Sňatek:</strong> <span id="modal-marriage"></span></p>
+            <p id="modal-row-death"><strong class="text-gray-500>Úmrtí:</strong> <span id="modal-death"></span></p>
+            <p id="modal-row-cause"><strong class="text-gray-500>Příčina úmrtí:</strong> <span id="modal-cause"></span></p>
+            <p id="modal-row-occupation"><strong class="text-gray-500>Povolání:</strong> <span id="modal-occupation"></span></p>
+
+            <div class="modal-buttons">
+                <a id="modal-link-birth" href="#" target="_blank" class="modal-button">Matrika narození</a>
+                <a id="modal-link-marriage" href="#" target="_blank" class="modal-button">Matrika sňatků</a>
+                <a id="modal-link-death" href="#" target="_blank" class="modal-button">Matrika úmrtí</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // --- Nastavení ---
+            const generations = 6;
+            const centerX = 500; 
+            const centerY = 20;  
+            const radii = [0, 80, 160, 240, 320, 400, 480]; 
+            const svg = document.getElementById('fan-chart');
+
+            // --- Vzorová DATA (beze změny) ---
+            const ancestorData = {
+                '1_0': {
+                    name: 'Já (Výchozí osoba)',
+                    birth: '1. 1. 2000, Praha',
+                    death: null, 
+                    cause: null, 
+                    occupation: 'Student',
+                    marriage: null, 
+                    linkBirth: 'https://example.com/matrika/narozeni/1',
+                    linkMarriage: null, 
+                    linkDeath: null     
+                },
+                '2_0': {
+                    name: 'Otec',
+                    birth: '10. 5. 1970, Brno',
+                    death: null,
+                    cause: null,
+                    occupation: 'Inženýr',
+                    marriage: '15. 6. 1995, Olomouc',
+                    linkBirth: 'https://example.com/matrika/narozeni/2',
+                    linkMarriage: 'https://example.com/matrika/snatky/1',
+                    linkDeath: null 
+                },
+                '2_1': {
+                    name: 'Matka',
+                    birth: '20. 8. 1972, Ostrava',
+                    death: null,
+                    cause: null,
+                    occupation: 'Lékařka',
+                    marriage: '15. 6. 1995, Olomouc',
+                    linkBirth: 'https://example.com/matrika/narozeni/3',
+                    linkMarriage: 'https://example.com/matrika/snatky/1',
+                    linkDeath: null
+                },
+                '3_0': {
+                    name: 'Děd (O)',
+                    birth: '5. 3. 1940, Plzeň',
+                    death: '12. 12. 2010, Plzeň',
+                    cause: 'Srdeční selhání',
+                    occupation: 'Učitel',
+                    marriage: '20. 7. 1965, Klatovy',
+                    linkBirth: 'https://example.com/matrika/narozeni/4',
+                    linkMarriage: 'https://example.com/matrika/snatky/2',
+                    linkDeath: 'https://example.com/matrika/umrti/1'
+                },
+                 '3_1': {
+                    name: 'Bába (O)',
+                    birth: '15. 9. 1942, Klatovy',
+                    death: '5. 1. 2015, Plzeň',
+                    cause: 'Stáří',
+                    occupation: null,
+                    marriage: '20. 7. 1965, Klatovy',
+                    linkBirth: null,
+                    linkMarriage: null,
+                    linkDeath: null
+                },
+                 '3_2': {
+                    name: 'Děd (M)',
+                    birth: '1. 2. 1945, Zlín',
+                    death: null,
+                    cause: null,
+                    occupation: 'Ekonom',
+                    marriage: '10. 8. 1970, Ostrava',
+                    linkBirth: null,
+                    linkMarriage: null,
+                    linkDeath: null
+                },
+                 '3_3': {
+                    name: 'Bába (M)',
+                    birth: '30. 11. 1948, Havířov',
+                    death: null,
+                    cause: null,
+                    occupation: 'Účetní',
+                    marriage: '10. 8. 1970, Ostrava',
+                    linkBirth: null,
+                    linkMarriage: null,
+                    linkDeath: null
+                }
+            };
+            
+            // Popisky (jména) pro buňky
+            const labels = {};
+            for (const key in ancestorData) {
+                if(ancestorData[key]) labels[key] = ancestorData[key].name;
+            }
+            
+            // --- Reference na modální okno a jeho prvky (beze změny) ---
+            const modal = document.getElementById('person-modal');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalName = document.getElementById('modal-name');
+            
+            const modalBirth = document.getElementById('modal-birth');
+            const modalMarriage = document.getElementById('modal-marriage');
+            const modalDeath = document.getElementById('modal-death');
+            const modalCause = document.getElementById('modal-cause');
+            const modalOccupation = document.getElementById('modal-occupation');
+            
+            const modalLinkBirth = document.getElementById('modal-link-birth');
+            const modalLinkMarriage = document.getElementById('modal-link-marriage');
+            const modalLinkDeath = document.getElementById('modal-link-death');
+
+            // --- Formátování data do češtiny (beze změny) ---
+            const czechMonths = [
+                'ledna', 'února', 'března', 'dubna', 'května', 'června',
+                'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'
+            ];
+
+            function formatCzechDate(dateString) {
+                if (!dateString) {
+                    return null;
+                }
+                const match = dateString.match(/^(\d{1,2})\. *(\d{1,2})\. *(\d{4})(.*)$/);
+
+                if (match) {
+                    const day = match[1];
+                    const monthIndex = parseInt(match[2], 10) - 1; 
+                    const year = match[3];
+                    const rest = match[4]; 
+
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        const monthName = czechMonths[monthIndex];
+                        return `${day}. ${monthName} ${year}${rest}`;
+                    }
+                }
+                return dateString;
+            }
+
+            // --- Funkce modálního okna (beze změny) ---
+            function updateModalRow(spanElement, value) {
+                const rowElement = spanElement.parentElement; 
+                if (value) {
+                    spanElement.textContent = value;
+                    rowElement.style.display = 'block'; 
+                } else {
+                    spanElement.textContent = ''; 
+                    rowElement.style.display = 'none';  
+                }
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+            }
+            modalCloseBtn.onclick = closeModal;
+            modal.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+            
+            function showModal(key) {
+                const data = ancestorData[key];
+                
+                if (data) {
+                    modalName.textContent = data.name;
+                    updateModalRow(modalBirth, formatCzechDate(data.birth));
+                    updateModalRow(modalMarriage, formatCzechDate(data.marriage));
+                    updateModalRow(modalDeath, formatCzechDate(data.death));
+                    updateModalRow(modalCause, data.cause);
+                    updateModalRow(modalOccupation, data.occupation);
+                    
+                    setButtonLink(modalLinkBirth, data.linkBirth);
+                    setButtonLink(modalLinkMarriage, data.linkMarriage);
+                    setButtonLink(modalLinkDeath, data.linkDeath);
+
+                } else {
+                    modalName.textContent = `Předek (Gen ${key.split('_')[0]}, Index ${key.split('_')[1]})`;
+                    updateModalRow(modalBirth, null);
+                    updateModalRow(modalMarriage, null);
+                    updateModalRow(modalDeath, null);
+                    updateModalRow(modalCause, null);
+                    updateModalRow(modalOccupation, null);
+                    
+                    setButtonLink(modalLinkBirth, null);
+                    setButtonLink(modalLinkMarriage, null);
+                    setButtonLink(modalLinkDeath, null);
+                }
+                
+                modal.classList.add('active'); 
+            }
+            
+            function setButtonLink(button, href) {
+                if (href && href !== '#') {
+                    button.href = href;
+                    button.classList.remove('disabled');
+                    button.removeAttribute('aria-disabled');
+                    button.style.display = 'inline-block'; 
+                } else {
+                    button.href = '#'; 
+                    button.classList.add('disabled');
+                    button.setAttribute('aria-disabled', 'true');
+                    button.style.display = 'none'; 
+                }
+            }
+
+            // --- Helper funkce (beze změny) ---
+            function polarToCartesian(cx, cy, radius, angleInDegrees) {
+                const angleInRadians = (angleInDegrees) * Math.PI / 180.0;
+                return {
+                    x: cx + (radius * Math.cos(angleInRadians)),
+                    y: cy + (radius * Math.sin(angleInRadians))
+                };
+            }
+
+            function describeArcSector(x, y, innerRadius, outerRadius, startAngle, endAngle) {
+                const startOuter = polarToCartesian(x, y, outerRadius, endAngle);
+                const endOuter = polarToCartesian(x, y, outerRadius, startAngle);
+                const startInner = polarToCartesian(x, y, innerRadius, endAngle);
+                const endInner = polarToCartesian(x, y, innerRadius, startAngle);
+                const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+                const d = [
+                    "M", startOuter.x, startOuter.y, 
+                    "A", outerRadius, outerRadius, 0, largeArcFlag, 0, endOuter.x, endOuter.y,
+                    "L", endInner.x, endInner.y,     
+                    "A", innerRadius, innerRadius, 0, largeArcFlag, 1, startInner.x, startInner.y,
+                    "Z"
+                ].join(" ");
+                return d;
+            }
+
+            // --- Funkce pro tvorbu textu (s úpravou zarovnání) ---
+            function createTextLabel(text, gen, midAngle, midRadius) {
+                const textPos = polarToCartesian(centerX, centerY, midRadius, midRadius);
+                let textAngle = 0;
+
+                const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                textEl.setAttribute("x", textPos.x);
+                textEl.setAttribute("y", textPos.y);
+
+                if (gen === 1) {
+                    textAngle = 0;
+                    textEl.style.textAnchor = "middle"; 
+                } else if (midAngle > 89 && midAngle < 91) { // Segment přímo nahoře
+                    textAngle = 0;
+                    textEl.style.textAnchor = "middle"; 
+                } else if (midAngle < 90) { 
+                    // Pravá strana
+                    textAngle = midAngle - 90;
+                    textEl.style.textAnchor = "start"; 
+                    textEl.setAttribute("dx", "3"); // Malý posun od středu
+                } else { 
+                    // Levá strana
+                    textAngle = midAngle - 90 + 180;
+                    textEl.style.textAnchor = "end"; 
+                    textEl.setAttribute("dx", "-3"); // Malý posun od středu
+                }
+
+                textEl.setAttribute("transform", `rotate(${textAngle}, ${textPos.x}, ${textPos.y})`);
+                textEl.classList.add("ancestor-text");
+                
+                if (gen > 4) textEl.style.fontSize = "6px";
+                if (gen > 5) textEl.style.fontSize = "5px";
+                textEl.textContent = text;
+                return textEl;
+            }
+
+            // --- Hlavní smyčka pro generování (beze změny) ---
+            const totalAngle = 180; 
+            for (let gen = 1; gen <= generations; gen++) {
+                const numAncestors = Math.pow(2, gen - 1); 
+                const angleSlice = totalAngle / numAncestors; 
+                const innerR = radii[gen - 1];
+                const outerR = radii[gen];
+
+                for (let i = 0; i < numAncestors; i++) {
+                    const startAngle = i * angleSlice;
+                    const endAngle = (i + 1) * angleSlice;
+                    
+                    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    const d = describeArcSector(centerX, centerY, innerR, outerR, startAngle, endAngle);
+                    path.setAttribute("d", d);
+                    path.classList.add("ancestor-cell");
+
+                    const midAngle = startAngle + (angleSlice / 2);
+                    const midRadius = innerR + (outerR - innerR) / 2;
+                    
+                    const labelKey = `${gen}_${i}`;
+                    const textContent = labels[labelKey] || `Předek ${gen}-${i}`; 
+                    const textEl = createTextLabel(textContent, gen, midAngle, midRadius);
+                    
+                    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    g.classList.add(`gen-${gen}`, 'ancestor-group'); 
+                    g.appendChild(path);
+                    g.appendChild(textEl);
+                    
+                    g.addEventListener('click', function() {
+                        showModal(labelKey); 
+                    });
+                    
+                    svg.appendChild(g);
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
+

@@ -512,8 +512,8 @@
                 textEl.classList.add("ancestor-text");
                 
                 // Zmenšení písma pro vnější generace
-               // if (gen > 4) textEl.style.fontSize = "6px";
-               // if (gen > 5) textEl.style.fontSize = "5px";
+                if (gen > 4) textEl.style.fontSize = "12px";
+                if (gen > 5) textEl.style.fontSize = "10px";
                textEl.textContent = text;
                return textEl;
             }

@@ -152,7 +152,7 @@
         
         .modal-content p strong {
             display: inline-block;
-            min-width: 130px; 
+            min-width: 80px; 
             color: #555;
         }
         
@@ -549,8 +549,8 @@
                 textEl.classList.add("ancestor-text");
                 
                 // Zmenšení písma pro vnější generace (zachováno dle původního kódu)
-                if (gen > 4) textEl.style.fontSize = "12px";
-                if (gen > 5) textEl.style.fontSize = "10px";
+                if (gen > 4) textEl.style.fontSize = "15px";
+                if (gen > 5) textEl.style.fontSize = "12px";
                 
                 // --- ZALAMOVÁNÍ TEXTU (NOVÁ LOGIKA) ---
                 const parts = text.split(/\s+/); // Rozdělení podle mezer

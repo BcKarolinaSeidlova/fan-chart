@@ -212,6 +212,7 @@
             <p id="modal-row-death"><strong class.text-gray-500>Úmrtí:</strong> <span id="modal-death"></span></p>
             <p id="modal-row-cause"><strong class.text-gray-500>Příčina úmrtí:</strong> <span id="modal-cause"></span></p>
             <p id="modal-row-occupation"><strong class.text-gray-500>Povolání:</strong> <span id="modal-occupation"></span></p>
+            <p id="modal-row-note"><strong class.text-gray-500>Poznámka:</strong> <span id="modal-note"></span></p>
 
             <div class="modal-buttons">
                 <a id="modal-link-birth" href="#" target="_blank" class="modal-button">Matrika narození</a>
@@ -237,7 +238,7 @@
                     birth: '11. 1. 1917, Nová Ves 29',
                     death: '15.8.1991, Zlín', 
                     cause: null, 
-                    occupation: 'Student',
+                    occupation: 'vyučil se mlynářem',
                     marriage: null, 
                     linkBirth: 'https://example.com/matrika/narozeni/1',
                     linkMarriage: null, 
@@ -465,6 +466,7 @@
             const modalDeath = document.getElementById('modal-death');
             const modalCause = document.getElementById('modal-cause');
             const modalOccupation = document.getElementById('modal-occupation');
+            const modalNote = document.getElementById('modal-note');
             
             const modalLinkBirth = document.getElementById('modal-link-birth');
             const modalLinkMarriage = document.getElementById('modal-link-marriage');
@@ -528,6 +530,7 @@
                     updateModalRow(modalDeath, formatCzechDate(data.death));
                     updateModalRow(modalCause, data.cause);
                     updateModalRow(modalOccupation, data.occupation);
+                    updateModalRow(modalNote, data.note); 
                     
                     setButtonLink(modalLinkBirth, data.linkBirth);
                     setButtonLink(modalLinkMarriage, data.linkMarriage);
@@ -540,6 +543,7 @@
                     updateModalRow(modalDeath, null);
                     updateModalRow(modalCause, null);
                     updateModalRow(modalOccupation, null);
+                    updateModalRow(modalNote, null);
                     
                     setButtonLink(modalLinkBirth, null);
                     setButtonLink(modalLinkMarriage, null);

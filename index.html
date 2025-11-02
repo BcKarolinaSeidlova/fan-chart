@@ -630,7 +630,9 @@
                 return d;
             }
 
-            // --- AKTUALIZOVANÁ FUNKCE PRO TEXT s podporou zalamování ---
+            
+                
+                            // --- AKTUALIZOVANÁ FUNKCE PRO TŘÍŘÁDKOVÉ ZALAMOVÁNÍ ---
             function createTextLabel(text, gen, midAngle, midRadius) {
                 const textPos = polarToCartesian(centerX, centerY, midRadius, midAngle); 
                 
@@ -638,10 +640,8 @@
                 textEl.setAttribute("x", textPos.x);
                 textEl.setAttribute("y", textPos.y);
 
-                // Otáčení textu podél tečny oblouku
+                // Otáčení textu (logika zůstává beze změny)
                 let textAngle = midAngle - 90; 
-                
-                // Pro první generaci (uprostřed) necháme text horizontální
                 if (gen === 1) {
                     textAngle = 0;
                 }
@@ -651,41 +651,72 @@
 
                 textEl.classList.add("ancestor-text");
                 
-                // Zmenšení písma pro vnější generace (zachováno dle původního kódu)
-                if (gen > 4) textEl.style.fontSize = "15px";
-                if (gen > 5) textEl.style.fontSize = "12px";
+                // Zmenšení písma pro vnější generace (zachováno)
+                if (gen > 4) textEl.style.fontSize = "12px";
+                if (gen > 5) textEl.style.fontSize = "10px";
                 
-                // --- ZALAMOVÁNÍ TEXTU (NOVÁ LOGIKA) ---
-                const parts = text.split(/\s+/); // Rozdělení podle mezer
+                // --- NOVÁ LOGIKA TŘÍ ŘÁDKŮ ---
+                const parts = text.split(/\s+/); 
                 
-                if (parts.length > 1) {
-                    // První řádek (Jméno/Jména)
-                    const line1 = parts.slice(0, -1).join(' '); 
-                    // Druhý řádek (Příjmení)
-                    const line2 = parts[parts.length - 1];      
+                if (parts.length >= 3) {
+                    const line1 = parts[0];             // První jméno
+                    const line2 = parts[1];             // Druhé jméno
+                    const line3 = parts.slice(2).join(' '); // Zbytek (Příjmení/Více příjmení)
                     
+                    // --- 1. ŘÁDEK (NEJVÝŠE) ---
                     const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
                     tspan1.textContent = line1;
-                    // Posun nahoru (relativně k aktuální velikosti fontu)
-                    tspan1.setAttribute('dy', '-0.4em');
+                    // Posun nahoru o 1 řádek, aby byl text centrován symetricky
+                    tspan1.setAttribute('dy', '-1em'); 
                     tspan1.setAttribute('x', textPos.x);
                     textEl.appendChild(tspan1);
 
+                    // --- 2. ŘÁDEK (STŘED) ---
                     const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
                     tspan2.textContent = line2;
-                    // Posun dolů o řádek 
-                    tspan2.setAttribute('x', textPos.x); 
+                    // Posun dolů o 1 řádek od předchozího, čímž se vrací do středu
                     tspan2.setAttribute('dy', '1em'); 
+                    tspan2.setAttribute('x', textPos.x); 
                     textEl.appendChild(tspan2);
+                    
+                    // --- 3. ŘÁDEK (NEJSPODNĚJI) ---
+                    const tspan3 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                    tspan3.textContent = line3;
+                    // Posun dolů o 1 řádek od předchozího
+                    tspan3.setAttribute('dy', '1em'); 
+                    tspan3.setAttribute('x', textPos.x); 
+                    textEl.appendChild(tspan3);
 
                 } else {
-                    // Pokud je text jen jedno slovo, vložte ho normálně
-                    textEl.textContent = text;
+                    // Původní logika pro 1 nebo 2 slova (zachování 2 řádků, nebo bez zalamování)
+                    
+                    if (parts.length === 2) {
+                        const line1 = parts[0];
+                        const line2 = parts[1];
+                        
+                        const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                        tspan1.textContent = line1;
+                        tspan1.setAttribute('dy', '-0.4em'); // Mírný posun nahoru
+                        tspan1.setAttribute('x', textPos.x);
+                        textEl.appendChild(tspan1);
+
+                        const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                        tspan2.textContent = line2;
+                        tspan2.setAttribute('x', textPos.x); 
+                        tspan2.setAttribute('dy', '1em'); // Posun dolů o řádek
+                        textEl.appendChild(tspan2);
+                        
+                    } else {
+                        // Jen jedno slovo, nezalamujeme
+                         textEl.textContent = text;
+                    }
                 }
-                // --- KONEC ZALAMOVÁNÍ TEXTU ---
+                // --- KONEC LOGIKY ---
 
                 return textEl;
-            }
+        }
+                
+
 
             // --- Hlavní smyčka pro generování (beze změny) ---
             const totalAngle = 180; 

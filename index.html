@@ -523,5 +523,65 @@
                     const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
                     tspan1.textContent = line1;
                     // Posun nahoru (relativně k aktuální velikosti fontu)
-                    tspan1.setAttribute('dy', '-0.4em'); 
+                    tspan1.setAttribute('dy', '-0.4em');
+                    tspan1.setAttribute('x', textPos.x);
+                    textEl.appendChild(tspan1);
+
+                    const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                    tspan2.textContent = line2;
+                    // Posun dolů o řádek 
+                    tspan2.setAttribute('x', textPos.x); 
+                    tspan2.setAttribute('dy', '1em'); 
+                    textEl.appendChild(tspan2);
+
+                } else {
+                    // Pokud je text jen jedno slovo, vložte ho normálně
+                    textEl.textContent = text;
+                }
+                // --- KONEC ZALAMOVÁNÍ TEXTU ---
+
+                return textEl;
+            }
+
+            // --- Hlavní smyčka pro generování (beze změny) ---
+            const totalAngle = 180; 
+            for (let gen = 1; gen <= generations; gen++) {
+                const numAncestors = Math.pow(2, gen - 1); 
+                const angleSlice = totalAngle / numAncestors; 
+                const innerR = radii[gen - 1];
+                const outerR = radii[gen];
+
+                for (let i = 0; i < numAncestors; i++) {
+                    const startAngle = i * angleSlice;
+                    const endAngle = (i + 1) * angleSlice;
+                    
+                    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    const d = describeArcSector(centerX, centerY, innerR, outerR, startAngle, endAngle);
+                    path.setAttribute("d", d);
+                    path.classList.add("ancestor-cell");
+
+                    const midAngle = startAngle + (angleSlice / 2);
+                    const midRadius = innerR + (outerR - innerR) / 2;
+                    
+                    const labelKey = `${gen}_${i}`;
+                    const textContent = labels[labelKey] || `Předek ${gen}-${i}`; 
+                    const textEl = createTextLabel(textContent, gen, midAngle, midRadius);
+                    
+                    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    g.classList.add(`gen-${gen}`, 'ancestor-group'); 
+                    g.appendChild(path);
+                    g.appendChild(textEl);
+                    
+                    g.addEventListener('click', function() {
+                        showModal(labelKey); 
+                    });
+                    
+                    svg.appendChild(g);
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
+    
      

@@ -836,7 +836,7 @@
                 },
 
                 '6_18': {
-                    name: 'Jakub Holub-Strejc',
+                    name: 'Jakub Holub (Strejc)',
                     birth: '',
                     death: '24. 8. 1781, Strašice 3 ',
                     cause: '',
@@ -1210,24 +1210,25 @@
                         const line1 = parts[0];
                         const line2 = parts[1];
                         
+                        // Nová (více symetrické centrování):
                         const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
                         tspan1.textContent = line1;
-                        tspan1.setAttribute('dy', '-0.4em'); // Mírný posun nahoru
+                        // Posun nahoru o 0.5 řádku (centrováno uprostřed dvou řádků)
+                        tspan1.setAttribute('dy', '-0.5em'); 
                         tspan1.setAttribute('x', textPos.x);
                         textEl.appendChild(tspan1);
 
                         const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
                         tspan2.textContent = line2;
                         tspan2.setAttribute('x', textPos.x); 
-                        tspan2.setAttribute('dy', '1em'); // Posun dolů o řádek
+                        // Posun dolů o 1 řádek od předchozího (-0.5 + 1.0 = +0.5, stále centrováno)
+                        tspan2.setAttribute('dy', '1em'); 
                         textEl.appendChild(tspan2);
-                        
                     } else {
                         // Jen jedno slovo, nezalamujeme
                          textEl.textContent = text;
                     }
                 }
-                // --- KONEC LOGIKY ---
 
                 return textEl;
         }

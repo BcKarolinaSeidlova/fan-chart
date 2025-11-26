@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap')
+
 body {
 	background-color: #f4ddba;
 	color: #683b05;
@@ -17,6 +19,7 @@ body {
 }
 
 h1, h2, h3 {
+	font-family: "Dancing Script";
 	margin-bottom: 0;
 	font-variant: small-caps;
 }
@@ -551,4 +554,5 @@ figcaption {
 .foto-his {
 	height: 400px;
 }
+
 

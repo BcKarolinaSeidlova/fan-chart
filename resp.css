@@ -1,0 +1,222 @@
+@media screen and (min-width: 900px) {
+
+
+.hamburger{
+	display: none;
+}
+
+.header {
+	width: 98%;
+}
+.navigation {
+	display: flex;
+	height: 2.5em;
+	padding: 0px 5px 0px;
+	width: 98%;
+	}
+	
+.nav-list {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+
+.main-his {
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+	width: 97%;
+}
+
+h1 {
+	font-size: 1.5em;
+}
+	
+.list {
+	display: flex;
+	flex-direction: column;
+	width: 15%;
+}
+
+.nav-list-his, #Menu {
+	margin-top: 15px;
+}
+
+
+/*.nav-item-his*/ button {
+	justify-content: flex-start;
+	font-size: 1em;
+	padding: 5px;
+	margin-left: 0px;
+	width: 90%;
+	}
+
+.nav-item {
+	width: 22%;
+	white-space: nowrap;
+	text-align: center;
+	font-size: 1.3em;
+	padding: 0px 2px 0px;
+}
+
+
+.header {
+	max-height: 37px;
+	justify-content: center;
+}
+
+.main {
+	flex-wrap: wrap;
+}
+
+.prehled {
+	max-width: 1000px;
+}
+
+.mapa {
+	max-width: 98%;
+	max-height: 75vh;
+}
+
+.overlay { 
+	position: absolute;
+	opacity:0;
+	font-size: 2em;
+	background: #f4ddba;
+	padding-left: inherit;
+	padding-right: inherit;
+	text-align: center;
+}
+
+.mapova:hover .overlay {
+	opacity: 1;
+}
+
+.prehled {
+	max-width: 1000px;
+}
+
+.vizitka {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-around;
+	height: auto;
+}
+
+.left {
+	width: 45vw;
+}
+
+.right {
+width: 45vw;
+justify-content: space-between;
+margin-top: 1.5em;
+height: 100%;
+
+}
+
+.slide {
+	max-width: 90%;
+}
+
+.fotogalerie {
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+.smerovka {
+	font-size: 1.2em;
+}
+
+tr:hover {
+	font-weight: bold;
+}
+
+#fotoValka {
+	width: 70%;
+}
+
+
+}
+
+
+@media screen and (max-width: 899px) {
+         button {
+		  font-size: 1em;
+		  width: 150px;
+		  flex-grow: 1;
+		  margin-left: 3px;
+	  }
+
+	#Menu {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-top: 20px;
+	}
+
+	.list {
+		width: 98%;
+	}
+
+	.cely-text {
+		width: 95vw;
+	}
+	
+	.prev,
+	.next { height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+		position: absolute;
+		font-weight: bold;
+		font-size: 3em;
+		color: #ffeddb;
+		text-shadow: -1px 0 #683b05, 0 1px #683b05, 1px 0 #683b05, 0 -1px #683b05;
+	}
+
+	.next {
+	  right: 0.3em;
+	}
+
+	.prev {
+		left: 0.3em;
+	}
+
+	.nav-item-his {
+		font-size: 1.1em;
+	}
+
+	.foto-his {
+		width: 70vw;
+                height: auto;
+        }
+
+	.znak {
+	flex-wrap: wrap;
+	justify-content: center;
+	}
+
+	table,
+	.valka {
+		width: 85vw;
+	}
+
+}
+
+@media screen and (max-width: 530px) {
+
+	.nav-list-his, #Menu {
+		font-size: 0.8em; 
+	}
+
+	button {
+		width: 120px;
+	}
+}
+
+

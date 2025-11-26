@@ -21,7 +21,6 @@ body {
 h1, h2, h3 {
 	font-family: "Dancing Script";
 	margin-bottom: 0;
-	font-variant: small-caps;
 }
 
 a {
@@ -554,6 +553,7 @@ figcaption {
 .foto-his {
 	height: 400px;
 }
+
 
 
 

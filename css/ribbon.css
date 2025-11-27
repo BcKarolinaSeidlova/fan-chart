@@ -15,7 +15,7 @@
 }
 
 .container {
-  height: 100dvh;
+  height: 10dvh;
   width: 100dvw;
   display: grid;
   place-items: center;

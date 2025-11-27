@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap");
+
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-background: #683b05;
+  --color-foreground: #ebd9c6
+}
+
+.container {
+  height: 100dvh;
+  width: 100dvw;
+  display: grid;
+  place-items: center;
+}
+
+ribbon {
+  position: relative;
+  text-align: center;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: "Dancing Script", serif;
+  font-weight: bold;
+  font-size: 1.3rem;
+  padding: 0.6rem 2rem;
+}
+
+.ribbon:before,
+.ribbon:after {
+  content: "";
+  position: absolute;
+  display: block;
+  bottom: -0.5rem;
+  border: 1.2rem solid var(--color-background);
+  z-index: -1;
+  filter: brightness(0.85);
+}
+
+.ribbon:before {
+  left: -1.6rem;
+  border-right-width: 1.5rem;
+  border-left-color: transparent;
+}
+
+.ribbon:after {
+  right: -1.6rem;
+  border-left-width: 1.5rem;
+  border-right-color: transparent;
+}
+
+.ribbon .ribbon-content:before,
+.ribbon .ribbon-content:after {
+  content: "";
+  position: absolute;
+  display: block;
+  border-style: solid;
+  border-color: var(--color-background) transparent transparent transparent;
+  bottom: -0.5rem;
+  filter: brightness(0.6);
+}
+
+.ribbon .ribbon-content:before {
+  left: 0;
+  border-width: 0.5rem 0 0 0.9rem;
+}
+
+.ribbon .ribbon-content:after {
+  right: 0;
+  border-width: 0.5rem 0.9rem 0 0;
+}

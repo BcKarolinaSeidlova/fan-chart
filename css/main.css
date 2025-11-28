@@ -3,7 +3,7 @@
 body {
 	background-color: #ebd9c6;
 	color: #683b05;
-	min-height: 100vh;
+	min-height: 98dvh;
 	font-family: "Times New Roman", Times, serif;
 }
 
@@ -333,6 +333,7 @@ figcaption {
 .foto-his {
 	height: 400px;
 }
+
 
 
 

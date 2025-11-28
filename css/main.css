@@ -111,6 +111,68 @@ footer > p > a {
 *
 */
 
+.container {
+  height: 10dvh;
+  width: 95dvw;
+  display: grid;
+  place-items: center;
+}
+
+.ribbon {
+  position: relative;
+  text-align: center;
+  background: #96734d;
+  color: #ebd9c6;
+  font-family: "Dancing Script", serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 0.6rem 2rem;
+}
+
+.ribbon:before,
+.ribbon:after {
+  content: "";
+  position: absolute;
+  display: block;
+  bottom: -0.5rem;
+  border: 1.2rem solid #96734d;
+  z-index: -1;
+  filter: brightness(0.85);
+}
+
+.ribbon:before {
+  left: -1.6rem;
+  border-right-width: 1.5rem;
+  border-left-color: transparent;
+}
+
+.ribbon:after {
+  right: -1.6rem;
+  border-left-width: 1.5rem;
+  border-right-color: transparent;
+}
+
+.ribbon .ribbon-content:before,
+.ribbon .ribbon-content:after {
+  content: "";
+  position: absolute;
+  display: block;
+  border-style: solid;
+  border-color: #96734d transparent transparent transparent;
+  bottom: -0.5rem;
+  filter: brightness(0.6);
+}
+
+.ribbon .ribbon-content:before {
+  left: 0;
+  border-width: 0.5rem 0 0 0.9rem;
+}
+
+.ribbon .ribbon-content:after {
+  right: 0;
+  border-width: 0.5rem 0.9rem 0 0;
+}
+
 
 
 

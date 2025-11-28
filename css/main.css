@@ -85,7 +85,7 @@ button:hover, button:active {
 *
 */
 
-.footer {
+footer {
 	margin-top: auto;
 	display: flex;
 	flex-direction: column;
@@ -96,7 +96,7 @@ button:hover, button:active {
 	width: 100%;
 }
 
-.footer > p > a {
+footer > p > a {
 	color: white;
 }
 
@@ -333,6 +333,7 @@ figcaption {
 .foto-his {
 	height: 400px;
 }
+
 
 
 

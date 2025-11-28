@@ -1,19 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap");
 
-
-/*,
-*::after,
-*::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}*/
-
-:root {
-  --color-background: #96734d;
-  --color-foreground: #ebd9c6
-}
-
 .container {
   height: 10dvh;
   width: 95dvw;
@@ -24,8 +10,8 @@
 .ribbon {
   position: relative;
   text-align: center;
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: #96734d;
+  color: #ebd9c6;
   font-family: "Dancing Script", serif;
   font-weight: bold;
   font-size: 1.5rem;
@@ -38,7 +24,7 @@
   position: absolute;
   display: block;
   bottom: -0.5rem;
-  border: 1.2rem solid var(--color-background);
+  border: 1.2rem solid #96734d;
   z-index: -1;
   filter: brightness(0.85);
 }
@@ -61,7 +47,7 @@
   position: absolute;
   display: block;
   border-style: solid;
-  border-color: var(--color-background) transparent transparent transparent;
+  border-color: #96734d transparent transparent transparent;
   bottom: -0.5rem;
   filter: brightness(0.6);
 }

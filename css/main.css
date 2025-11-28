@@ -4,6 +4,7 @@
 body {
 	display:flex;
 	flex-direction: column;
+	align-items: center;
 	background-color: #ebd9c6;
 	color: #683b05;
 	min-height: 98dvh;
@@ -14,6 +15,7 @@ section {
    display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
+	align-items: center;
 }
 
 section :last-child {
@@ -182,6 +184,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

@@ -52,6 +52,7 @@ button {
   color: #683B05;
   font-size: 1em;
   padding: 5px;
+  margin: 10px;
   border: 2px solid #C1A07C;
   border-radius: 20px;
   background-color: #ffeddb;
@@ -333,6 +334,7 @@ figcaption {
 .foto-his {
 	height: 400px;
 }
+
 
 
 

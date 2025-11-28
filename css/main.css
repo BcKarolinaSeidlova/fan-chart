@@ -17,7 +17,7 @@ section {
 }
 
 section :last-child {
-	justify-content: flex-end;
+	margin-top: auto;
 }
 
 .content {
@@ -182,6 +182,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

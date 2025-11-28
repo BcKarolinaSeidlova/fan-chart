@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lenzovi</title>
+
+    <link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/resp.css">
+    
+    <style>
+    /* Import fontu EB Garamond */
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+   
+        body {
+            font-family: 'EB Garamond', serif;
+            background-color: #ebd9c6;
+            color: #4a331c;
+            margin: 0;
+            overflow-y: auto; 
+            overflow-x: hidden; 
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+            box-sizing: border-box; 
+            text-align: center; 
+        }
+
+        .page-wrapper h1 {
+            font-family: "Dancing Script";
+            font-size: 32px;
+            color: #5C4033; 
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .page-wrapper .instructions {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .chart-container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            font-size: 10px;
+        }
+
+        /* ----- Styly pro buňky rodokmenu ----- */
+        .ancestor-cell {
+            fill: #ffffff;
+            stroke: #a8763e;
+            stroke-width: 1;
+            transition: fill 0.2s ease-in-out;
+        }
+        
+        .ancestor-group {
+             cursor: pointer;
+        }
+
+        .ancestor-group:hover .ancestor-cell {
+            fill: #704d29;
+        }
+
+        .ancestor-text {
+            fill: #5d4222;
+            /* text-anchor se nyní nastavuje v JS */
+            dominant-baseline: middle;
+            pointer-events: none;
+            font-size: 20px;
+            font-weight: 500;
+        }
+   
+        /* Barevné odlišení generací *//* https://www.w3schools.com/colors/colors_picker.asp */
+        .gen-1 .ancestor-cell { fill: #f2e6d9; }
+        .gen-2 .ancestor-cell { fill: #ebd9c6; }
+        .gen-3 .ancestor-cell { fill: #e4cdb4; }
+        .gen-4 .ancestor-cell { fill: #ddc0a1; }
+        .gen-5 .ancestor-cell { fill: #d6b48f; }
+        .gen-6 .ancestor-cell { fill: #cfa77d; }
+        
+        .ancestor-group:hover .ancestor-cell {
+            fill: #815931;
+        }
+        .ancestor-group:hover .ancestor-text {
+            fill: white;
+            font-weight: bold;
+        }
+        
+        /* ----- Styly pro modální okno (beze změny) ----- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex; 
+        }
+
+        .modal-content {
+            background-color: #f8f2ec;
+            margin: auto;
+            padding: 25px;
+            border: 1px solid #956637;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .modal-content h2 {
+            margin-top: 0;
+            color: #5C4033; 
+        }
+        
+        .modal-content p {
+            line-height: 1.6;
+            font-size: 20px;
+            display: none; 
+        }
+        
+        .modal-content p strong {
+            display: inline-block;
+            min-width: 80px; 
+            color: #555;
+        }
+        
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; 
+            gap: 10px; 
+        }
+        
+        .modal-button {
+            display: inline-block; 
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #815931; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .modal-button:hover {
+            background-color: #cfa77d; 
+        }
+        
+        .modal-button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <h1>Předkové rodu Lenzů</h1>
+        <p class="instructions">Kliknutím na pole se jménem zobrazíte detailní informace o osobě.</p>
+
+        <div class="chart-container">
+            <svg id="fan-chart" viewBox="0 0 1000 520"></svg>
+        </div>
+
+		<div><a href="index.html">Zpět na rozcestník rodů </a></div>
+		<footer>Vytvořila Karolína </footer>
+    </div>
+
+    <div id="person-modal" class="modal">
+        <div class="modal-content">
+            <span id="modal-close-btn" class="modal-close">&times;</span>
+            
+            <h2 id="modal-name">Jméno osoby</h2>
+            
+            <p id="modal-row-birth"><strong class.text-gray-500>Narození:</strong> <span id="modal-birth"></span></p>
+            <p id="modal-row-marriage"><strong class.text-gray-500>Sňatek:</strong> <span id="modal-marriage"></span></p>
+            <p id="modal-row-death"><strong class.text-gray-500>Úmrtí:</strong> <span id="modal-death"></span></p>
+            <p id="modal-row-cause"><strong class.text-gray-500>Příčina úmrtí:</strong> <span id="modal-cause"></span></p>
+            <p id="modal-row-occupation"><strong class.text-gray-500>Povolání:</strong> <span id="modal-occupation"></span></p>
+            <p id="modal-row-note"><strong class.text-gray-500>Poznámka:</strong> <span id="modal-note"></span></p>
+
+            <div class="modal-buttons">
+                <a id="modal-link-birth" href="#" target="_blank" class="modal-button">Matrika narození</a>
+                <a id="modal-link-marriage" href="#" target="_blank" class="modal-button">Matrika sňatků</a>
+                <a id="modal-link-death" href="#" target="_blank" class="modal-button">Matrika úmrtí</a>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        (function() {
+            // --- Nastavení ---
+            const generations = 6;
+            const centerX = 500; 
+            const centerY = 20;  
+            const radii = [0, 80, 160, 240, 320, 400, 480]; 
+            const svg = document.getElementById('fan-chart');
+
+            // --- Vzorová DATA (beze změny) ---
+            const ancestorData = {
+                '1_0': {
+                    name: 'Karel Lenz',
+                    birth: '11. 1. 1917, Nová Ves 29',
+                    death: '15.8.1991, Zlín', 
+                    cause: null, 
+                    occupation: 'vyučil se mlynářem',
+                    marriage: null, 
+                    linkBirth: 'https://example.com/matrika/narozeni/1',
+                    linkMarriage: null, 
+                    linkDeath: null     
+                },
+                '2_0': {
+                    name: 'Václav Lenz',
+                    birth: '13. 10. 1887, Střítež 19',
+                    death: 'neznámé',
+                    cause: null,
+                    occupation: 'Zedník, dělník',
+                    marriage: '28. 12. 1914, Dobrš',
+                    linkBirth: 'https://digi.ceskearchivy.cz/11919/96/3478/1523/73/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3219/360/2001/896/67/0',
+                    linkDeath: null 
+                },
+                '2_1': {
+                    name: 'Josefa Nová',
+                    birth: '4. 3. 1889, Osek 58 - Duchcov',
+                    death: null,
+                    cause: null,
+                    occupation: null,
+                    marriage: '28. 12. 1914, Dobrš',
+                    linkBirth: 'http://vademecum.soalitomerice.cz/vademecum/permalink?xid=09ddd7cea03b9b8d:4e496e4e:12216bae987:-7f7e&scan=1312ea7ccc654648bba72a8125f87c3b',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3219/360/2001/896/67/0',
+                    linkDeath: null
+                },
+                '3_0': {
+                    name: 'Vojtěch Lenz',
+                    birth: '15. 4. 1859, Milejovice 23',
+                    death: 'neznámo',
+                    cause: null,
+                    occupation: 'Hajný v Čepřovicích (1906), Šafář v Jiřeticích (1921), ',
+                    marriage: '28. 7. 1885, Kváskovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3896/56/1235/1687/64/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/6286/34/1768/772/102/0',
+                    linkDeath: '',
+                    note: 'druhá manželka Marie Urbanová -; sňatek 1894 v Nihošovicích'
+                },
+
+                 '3_1': {
+                    name: 'Anna Němcová',
+                    birth: '6. 10. 1864, Miloňovice 14',
+                    death: ' před 1894, neznámo kde',
+                    cause: '',
+                    occupation: '',
+                    marriage: '28. 7. 1885, Kváskovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/4426/175/3080/1048/78/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/6286/34/1768/772/102/0',
+                    linkDeath: ''
+                },
+
+                 '3_2': {
+                    name: 'Václav Nový',
+                    birth: '18. 8. 1844, Maleč 5',
+                    death: '',
+                    cause: '',
+                    occupation: 'domkář',
+                    marriage: '22. 2. 1880, Dobrš',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3219/48/1936/1197/120/0',
+                    linkDeath: ''
+                },
+
+                 '3_3': {
+                    name: 'Marie Řáhová',
+                    birth: '14. 3. 1846, Nová Ves 29',
+                    death: '',
+                    cause: '',
+                    occupation: null,
+                    marriage: '22. 2. 1880, Dobrš',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3211/48/1087/2811/67/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3219/48/1936/1197/120/0',
+                    linkDeath: null
+                },
+        
+                '4_0': {
+                    name: 'Josef Lenz',
+                    birth: '3. 3. 1824, Vlachovo Březí 115',
+                    death: null,
+                    cause: null,
+                    occupation: 'volák a služebný v panském dvoře v Milejovicích',
+                    marriage: '28. 2. 1859, Milejovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8364/64/2857/612/120/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3902/65/1631/1079/51/0',
+                    linkDeath: null
+                },
+
+                '4_1': {
+                    name: 'Marie Švíková',
+                    birth: '15. 12. 1832, Milejovice 27',
+                    death: null,
+                    cause: null,
+                    occupation: null,
+                    marriage: '28. 2. 1859, Milejovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3895/44/3204/2585/66/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3902/65/1631/1079/51/0',
+                    linkDeath: null
+                },
+
+                '4_2': {
+                    name: 'Matěj Němec',
+                    birth: '27. 7. 1827, Miloňovice 7',
+                    death: '1. 4. 1877, Miloňovice 13',
+                    cause: 'zapálení plic',
+                    occupation: 'Podruh, obecní slouha',
+                    marriage: '5. 10. 1852, Miloňovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/4425/6/1215/2468/85/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/4430/74/1036/1577/118/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/4436/100/1003/2170/110/0'
+                },
+
+                '4_3': {
+                    name: 'Anna Roučková',
+                    birth: '3. 2. 1831, Vrbice 7',
+                    death: null,
+                    cause: null,
+                    occupation: null,
+                    marriage: '5. 10. 1852, Miloňovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8143/295/960/1627/125/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/4430/74/1036/1577/118/0',
+                    linkDeath: null
+                },
+
+                '4_4': {
+                    name: 'Václav Nový',
+                    birth: '25. 9. 1806, Maleč 5',
+                    death: '11. 3. 1873, Maleč 5',
+                    cause: 'Sešlost věkem',
+                    occupation: 'Domkář',
+                    marriage: '12. 11. 1833, Zuklín',
+                    linkBirth: 'http://www.portafontium.eu/iipimage/30068834/strasin-09_0120-n?x=237&y=212&w=244&h=85',
+                    linkMarriage: 'http://www.portafontium.eu/iipimage/30068835/strasin-10_1320-o?x=43&y=393&w=285&h=99',
+                    linkDeath: 'https://www.portafontium.eu/iipimage/30068849/strasin-24_1930-z?language=cs&x=95&y=175&w=233&h=514'
+                 },
+
+                 '4_5': {
+                    name: 'Josefa Žílová',
+                    birth: '1. 3. 1808, Zuklín 8',
+                    death: '23. 4. 1873, Maleč 5',
+                    cause: 'Tyfus (hlavnička)',
+                    occupation: '',
+                    marriage: '12. 11. 1833, Zuklín',
+                    linkBirth: 'http://www.portafontium.eu/iipimage/30068834/strasin-09_3440-n?x=540&y=520&w=226&h=79',
+                    linkMarriage: 'http://www.portafontium.eu/iipimage/30068835/strasin-10_1320-o?x=43&y=393&w=285&h=99',
+                    linkDeath: 'https://www.portafontium.eu/iipimage/30068849/strasin-24_1940-z?language=cs&x=15&y=15&w=152&h=335'
+                 },
+
+                 '4_6': {
+                    name: 'Josef Řáha',
+                    birth: '31. 7. 1825, Nová Ves 29',
+                    death: '',
+                    cause: 'domkář',
+                    occupation: '',
+                    marriage: '28. 1. 1845, Nová Ves',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3211/9/975/854/80/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3218/15/1035/1159/82/0',
+                    linkDeath: ''
+                },
+
+                 '4_7': {
+                    name: 'Josefa Dolíšková',
+                    birth: '26. 2. 1816, Víska 1',
+                    death: '30. 1. 1882, Nová Ves 29',
+                    cause: 'Sešlost věkem',
+                    occupation: '',
+                    marriage: '28. 1. 1845, Nová Ves',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3206/148/1139/2956/109/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3218/15/1035/1159/82/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3223/222/1307/2688/69/0'
+                 },
+                    
+                '5_0': {
+                    name: 'Ignác Lenz',
+                    birth: '18. 7. 1776, Vlachovo Březí 90',
+                    death: '1. 1. 1837, Vlachovo Březí 115',
+                    cause: 'souchotiny',
+                    occupation: 'soukenický tovaryš',
+                    marriage: '15. 11. 1814, Vlachovo Březí',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8358/68/2596/554/115/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8363/7/1253/1958/94/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/8374/78/1291/1238/109/0'
+                },
+
+                 '5_1': {
+                    name: 'Marie Magdalena Formánková',
+                    birth: '12. 2. 1784, Vlachovo Březí 144',
+                    death: '8. 11. 1832, Vlachovo Březí 115',
+                    cause: 'cholera',
+                    occupation: '',
+                    marriage: '15. 11. 1814, Vlachovo Březí',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8358/116/2802/1515/84/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8363/7/1253/1958/94/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/8374/56/1586/2653/69/0'
+                },
+
+                '5_2': {
+                    name: 'neznámý',
+                    birth: '',
+                    death: '',
+                    cause: '',
+                    occupation: '',
+                    marriage: '',
+                    linkBirth: '',
+                    linkMarriage: '',
+                    linkDeath: '',
+                    note: 'později je uveden jako otec Antonín Vytelík, dragoun od saských hranic'
+                },
+
+                '5_3': {
+                    name: 'Anna Švíková',
+                    birth: '28. 8. 1808, Milejovice 34',
+                    death: '',
+                    cause: '',
+                    occupation: '',
+                    marriage: '',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3895/14/940/1559/150/0',
+                    linkMarriage: '',
+                    linkDeath: ''
+                  },
+
+                '5_4': {
+                    name: 'neznámý',
+                    birth: '',
+                    death: '',
+                    cause: '',
+                    occupation: '',
+                    marriage: '',
+                    linkBirth: '',
+                    linkMarriage: '',
+                    linkDeath: '',
+                    note: ''
+                  },
+
+                '5_5': {
+                    name: 'Kateřina Němcová',
+                    birth: '9. 8. 1804, Miloňovice 10',
+                    death: '18. 5. 1876, Miloňovice 10',
+                    cause: 'sešlost věkem',
+                    occupation: '',
+                    marriage: '',
+                    linkBirth: 'https://digi.ceskearchivy.cz/4423/59/979/2460/79/0',
+                    linkMarriage: '',
+                    linkDeath: 'https://digi.ceskearchivy.cz/4436/97/1804/832/150/0',
+                    note: ''
+                 },
+                
+                '5_6': {
+                    name: 'Tomáš Roučka',
+                    birth: '19. 12. 1805, Vlkonice 21',
+                    death: '',
+                    cause: '',
+                    occupation: 'podruh',
+                    marriage: '26. 2. 1827, Stachy',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8142/74/2989/2287/94/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/7347/36/1046/1722/132/0',
+                    linkDeath: '',
+                    note:'emigroval do Ameriky asi v roce 1851'
+                },
+
+                '5_7': {
+                    name: 'Mariana Venclíková',
+                    birth: '9. 9. 1808, Stachy 117',
+                    death: '',
+                    cause: '',
+                    occupation: '',
+                    marriage: '26. 2. 1827, Stachy',
+                    linkBirth: 'https://digi.ceskearchivy.cz/7339/91/1171/1401/87/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/7347/36/1046/1722/132/0',
+                    linkDeath: ''
+                  },
+
+                "5_8":{
+                    name:'Tomáš Nový',
+                    birth:'30. 11. 1769, Maleč',
+                    death:'11. 1. 1828, Maleč 5',
+                    cause:'souchotiny',
+                    occupation:'domkář a zedník',
+                    marriage:'27. 11. 1799, Strašice',
+                    linkBirth:'https://digi.ceskearchivy.cz/3204/58/2798/1575/71/0',
+                    linkMarriage:'https://digi.ceskearchivy.cz/8515/106/749/1082/150/0',
+                    linkDeath:'https://www.portafontium.eu/iipimage/30068836/strasin-11_0260-z?x=549&y=315&w=158&h=363'
+                },
+
+                 '5_9':{
+                    name: 'Anna Holubová',
+                    birth: '20. 6. 1780, Strašice',
+                    death: '15. 8. 1840, Maleč 5',
+                    cause: 'souchotiny',
+                    occupation: '',
+                    marriage: '27. 11. 1799, Strašice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8504/128/858/891/98/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8515/106/749/1082/150/0',
+                    linkDeath: 'https://www.portafontium.eu/iipimage/30068849/strasin-24_0210-z?language=cs&x=163&y=461&w=147&h=339',
+                    note: 'při narození zapsána jako Strejcová, otec mívá obojí příjmení'
+                },
+
+               '5_10': {
+                    name: 'Matěj Žíla',
+                    birth: '7. 2. 1762, Nezdice',
+                    death: '19. 3. 1847, Zuklín 8',
+                    cause: 'sešlost věkem',
+                    occupation: '',
+                    marriage: '20. 11. 1791, Nezdice',
+                    linkBirth: 'www.portafontium.eu/iipimage/30068828/strasin-03_0900-n?x=-54&y=-111&w=602&h=1383',
+                    linkMarriage: 'www.portafontium.eu/iipimage/30068832/strasin-07_0090-o?x=169&y=199&w=232&h=533',
+                    linkDeath: 'www.portafontium.eu/iipimage/30068849/strasin-24_0460-z?x=128&y=308&w=151&h=347'
+                },
+
+               '5_11': {
+                    name: 'Dorota Klomfarová',
+                    birth: '12. 9. 1773, Nezdice 32',
+                    death: '26. 7. 1839',
+                    cause: 'sešlost věkem',
+                    occupation: '',
+                    marriage: '20. 11. 1791, Nezdice',
+                    linkBirth: 'https://www.portafontium.eu/iipimage/30068828/strasin-03_1230-n?x=545&y=24&w=177&h=408',
+                    linkMarriage: 'https://www.portafontium.eu/iipimage/30068832/strasin-07_0090-o?x=169&y=199&w=232&h=533',
+                    linkDeath: 'https://www.portafontium.eu/iipimage/30068849/strasin-24_0180-z?x=23&y=-21&w=227&h=522'
+                  },
+
+                '5_12': {
+                    name: 'Josef Řáha',
+                    birth: '10. 1. 1791, Nová Ves 29',
+                    death: '16. 12. 1865, Nová Ves 29',
+                    cause: 'sešlost věkem',
+                    occupation: '',
+                    marriage: '26. 2. 1821',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3205/78/810/1995/97/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3217/64/811/2368/150/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3223/65/879/838/94/0'
+                  },
+    
+               '5_13': {
+                    name: 'Anna Kovaříková',
+                    birth: '13. 5. 1793, Nová Ves 6',
+                    death: '29. 7. 1842',
+                    cause: 'dušnota',
+                    occupation: '',
+                    marriage: '26. 2. 1821, Dobrš',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3205/80/1027/1075/92/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3217/64/811/2368/150/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3222/10/1138/1073/110/0',
+                    note:'vdávala se jako vdova po...'
+                  },
+
+                '5_14': {
+                    name: 'Jan Dolíška',
+                    birth: '12. 6. 1787, Víska 1',
+                    death: '14. 11. 1859, Damíč 28',
+                    cause: 'sešlost věkem',
+                    occupation: '',
+                    marriage: '25. 9. 1808, Nová Ves',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3205/107/2937/1407/127/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3217/60/1050/2079/142/0',
+                    linkDeath: 'https://www.portafontium.eu/iipimage/30060755/bukovnik-26_0080-z?x=277&y=255&w=137&h=315'
+                  },
+
+               '5_15': {
+                    name: 'Josefa Janoutová',
+                    birth: '27. 2. 1791, Nová Ves 3',
+                    death: '22. 9. 1847, Víska 1',
+                    cause: 'zatvrzení žaludku',
+                    occupation: '',
+                    marriage: '25. 9. 1808, Nová Ves',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3205/78/751/2555/122/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3217/60/1050/2079/142/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3222/28/785/1569/92/0'
+                },                  
+                     
+                '6_0': {
+                    name: 'Matěj Lenz',
+                    birth: '',
+                    death: '',
+                    cause: '',
+                    occupation: 'krejčí',
+                    marriage: '5. 11. 1769, Vlachovo Březí',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8361/67/2841/1996/78/0',
+                    linkDeath: ''
+                },
+
+                '6_1': {
+                    name: 'Dorota Laadová',
+                    birth: '30. 1. 1739, Vlachovo Březí',
+                    death: '26. 4. 1801, Vlachovo Březí 90',
+                    cause: 'souchotiny',
+                    occupation: '',
+                    marriage: '5. 11. 1769, Vlachovo Březí',
+                    linkBirth: 'http://digi.ceskearchivy.cz/8357/79/2371/784/150/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8361/67/2841/1996/78/0',
+                    linkDeath: 'http://digi.ceskearchivy.cz/8363/101/1143/1596/150/0',
+                    note: 'vdávala se jako vdova po Vítu Kloučkovi'
+                },
+
+                '6_2': {
+                    name: 'Václav Formánek',
+                    birth: '22. 9. 1755, Vlachovo Březí',
+                    death: '15. 4. 1796, Vlachovo Březí 157',
+                    cause: 'vodnatelnost',
+                    occupation: 'soused',
+                    marriage: '22. 10. 1782, Vlachovo Březí',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8357/167/2896/2179/78/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8361/94/2602/1653/98/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/8362/73/2973/2662/63/0',
+                    note: null
+                },
+
+                '6_3': {
+                    name: 'Markéta Holcová',
+                    birth: '20. 6. 1763, Vlachovo Březí',
+                    death: null,
+                    cause: null,
+                    occupation: null,
+                    marriage: '22. 10. 1782, Vlachovo Březí',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8357/207',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8361/94/2602/1653/98/0',
+                    linkDeath: null,
+                    note: 'podruhé se vdala za Josefa Šroma, soukeníka z Vlachova Březí'
+                },
+
+                '6_4': {
+                    name: 'neznámý',
+                    birth: null,
+                    death: null,
+                    cause: null,
+                    occupation: null,
+                    marriage: null,
+                    linkBirth: null,
+                    linkMarriage: null,
+                    linkDeath: null,
+                    note: null
+                },
+
+                '6_5': {
+                    name: 'neznámá',
+                    birth: null,
+                    death: null,
+                    cause: null,
+                    occupation: null,
+                    marriage: null,
+                    linkBirth: null,
+                    linkMarriage: null,
+                    linkDeath: null,
+                    note: null
+                },
+
+                '6_6': {
+                    name: 'Vojtěch Švík',
+                    birth: 'cca 1760',
+                    death: '30. 9. 1824, Hoštice 28',
+                    cause: 'souchotiny',
+                    occupation: 'invalida (asi bývalý voják)',
+                    marriage: '7. 2. 1804, Milejovice',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3891/7/1885/1697/60/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3904/12/1449/2075/85/0',
+                    note: 'datum narození neznáme, protože chybí starší matrika pro Hoštice'
+                },
+
+                '6_7': {
+                    name: 'Marie Krajánková',
+                    birth: 'cca 1771',
+                    death: '21. 2. 1846, Milejovice 32',
+                    cause: 'sešlost věkem',
+                    occupation: '',
+                    marriage: '7. 2. 1804, Milejovice',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3891/7/1885/1697/60/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3905/27/1324/928/94/0',
+                    note: 'datum narození neznáme, protože chybí starší matrika'
+                },
+
+                '6_8': {
+                     name: 'neznámá',
+                    birth: null,
+                    death: null,
+                    cause: null,
+                    occupation: null,
+                    marriage: null,
+                    linkBirth: null,
+                    linkMarriage: null,
+                    linkDeath: null,
+                    note: null
+                },
+
+                '6_9':{
+                     name: 'neznámá',
+                    birth: null,
+                    death: null,
+                    cause: null,
+                    occupation: null,
+                    marriage: null,
+                    linkBirth: null,
+                    linkMarriage: null,
+                    linkDeath: null,
+                    note: null
+                },
+
+                '6_10': {
+                    name: 'Václav Němec',
+                    birth: '10. 1. 1770, Zadní Ptákovice',
+                    death: '',
+                    cause: '',
+                    occupation: 'chalupník',
+                    marriage: '17. 11. 1799, Miloňovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/4422/70/1495/2578/69/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/4428/14/1523/2327/58/0',
+                    linkDeath: '',
+                    note: ''
+                },
+
+                '6_11': {
+                    name: 'Marie Anna Dvořáková',
+                    birth: '4. 9. 1780, Miloňovice 10',
+                    death: '',
+                    cause: '',
+                    occupation: '',
+                    marriage: '17. 11. 1799, Miloňovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/4422/121/1272/1822/80/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/4428/14/1523/2327/58/0',
+                    linkDeath: '',
+                    note: 'někdy označovaná jako Švandová, po střeše'
+               },
+                
+                '6_12': {
+                    name: 'Pavel Roučka',
+                    birth: '9. 9. 1778, Přečín 28',
+                    death: '22. 6. 1843, Nová Ves 36',
+                    cause: 'vodnatelnost',
+                    occupation: 'podruh',
+                    marriage: '1. 6. 1802, Vlkonice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/8141/71/1152/2105/121/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8166/40/3087/1691/91/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3222/13/1062/959/79/0'
+                },
+
+                '6_13': {
+                    name: 'Ludmila Lopatková',
+                    birth: 'okolo 1783',
+                    death: '31. 12. 1850, Nová Ves 36',
+                    cause: 'sešlost věkem',
+                    occupation: '',
+                    marriage: '1. 6. 1802, Vlkonice',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8166/40/3087/1691/91/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3222/42/1013/2333/80/0'
+                },
+
+                '6_14': {
+                    name: 'Vojtěch Venclík',
+                    birth: '',
+                    death: '',
+                    cause: '',
+                    occupation: '',
+                    marriage: '22. 11. 1795, Stachy',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/7346/15/1576/1763/69/0',
+                    linkDeath: ''
+                },
+
+                '6_15': {
+                    name: 'Mariana Záhorková',
+                    birth: '',
+                    death: '',
+                    cause: '',
+                    occupation: '',
+                    marriage: '22. 11. 1795, Stachy',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/7346/15/1576/1763/69/0',
+                    linkDeath: ''
+                },
+
+                '6_16': {
+                    name: 'Vít Nový',
+                    birth: '5. 5. 1721, Maleč',
+                    death: '',
+                    cause: '',
+                    occupation:'',
+                    marriage: '12.11.1747, Maleč',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3203/51/2918/866/85/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3215/34/2696/1433/84/0',
+                    linkDeath: ''
+                },
+
+                 '6_17': {
+                    name: 'Kateřina Vítová',
+                    birth: '2.10.1727, Maleč',
+                    death: '',
+                    cause: '',
+                    occupation:'',
+                    marriage: '12.11.1747, Maleč',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3203/64/2988/2440/79/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3215/34/2696/1433/84/0',
+                    linkDeath: ''
+                },
+
+                '6_18': {
+                    name: 'Jakub Holub (Strejc)',
+                    birth: '',
+                    death: '24. 8. 1781, Strašice 3 ',
+                    cause: '',
+                    occupation:'',
+                    marriage: '22. 1. 1765, Volenice',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8513/80/2797/1907/71/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/8521/55/1219/1501/150/0'
+                },
+                
+                '6_19': {
+                    name: 'Barbora Frantlová',
+                    birth: '30.3.1739, Vojnice',
+                    death: '27. 7. 1812, Strašice 3',
+                    cause: 'sešlost věkem',
+                    occupation:'',
+                    marriage: '22. 1. 1765, Volenice',
+                    linkBirth: 'https://www.portafontium.eu/iipimage/30060734/bukovnik-05_0540-n?language=cs&x=520&y=407&w=466&h=162',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/8513/80/2797/1907/71/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/8513/118/1064/2254/99/0'
+                },
+
+                '6_20': {
+                    name: 'Jakub Žíla',
+                    birth: '6. 9. 1735, Nezdice',
+                    death: '6. 10. 1812, Nezdice 48',
+                    cause: '',
+                    occupation:'',
+                    marriage: '24. 11. 1754, Nezdice ',
+                    linkBirth: 'https://www.portafontium.eu/iipimage/30068828/strasin-03_0250-n?x=2&y=-11&w=523&h=181',
+                    linkMarriage: 'https://www.portafontium.eu/iipimage/30068828/strasin-03_1670-o?x=93&y=238&w=522&h=181',
+                    linkDeath: 'https://www.portafontium.eu/iipimage/30068836/strasin-11_0610-z?x=44&y=594&w=487&h=169'
+                },
+
+                '6_21': {
+                    name: 'Barbora Vaníčková ',
+                    birth: '',
+                    death: '',
+                    cause: '',
+                    occupation:'',
+                    marriage: '24. 11. 1754, Nezdice ',
+                    linkBirth: '',
+                    linkMarriage: 'https://www.portafontium.eu/iipimage/30068828/strasin-03_1670-o?x=93&y=238&w=522&h=181',
+                    linkDeath: ''
+                },
+
+                   '6_22': {
+                    name: 'Jan Klomfar',
+                    birth: 'okolo 1734',
+                    death: '3. 9. 1802, Nezdice 32',
+                    cause: '',
+                    occupation:'',
+                    marriage: '1. 11. 1761, Nezdice',
+                    linkBirth: '',
+                    linkMarriage: 'https://www.portafontium.eu/iipimage/30068828/strasin-03_1730-o?x=97&y=-10&w=376&h=130',
+                    linkDeath: 'https://www.portafontium.eu/iipimage/30068836/strasin-11_0500-z?x=502&y=402&w=494&h=171'
+                },
+
+                   '6_23': {
+                    name: 'Marie Anna Václavíková',
+                    birth: '17. 6. 1745, Nezdice ',
+                    death: '5. 12. 1802, Nezdice 32',
+                    cause: '',
+                    occupation:'',
+                    marriage: '1. 11. 1761, Nezdice',
+                    linkBirth: 'https://www.portafontium.eu/iipimage/30068828/strasin-03_0500-n?x=469&y=9&w=605&h=210',
+                    linkMarriage: 'https://www.portafontium.eu/iipimage/30068828/strasin-03_1730-o?x=97&y=-10&w=376&h=130',
+                    linkDeath: 'https://www.portafontium.eu/iipimage/30068836/strasin-11_0500-z?x=502&y=529&w=494&h=171'
+                },
+
+                   '6_24': {
+                    name: 'Martin Řáha',
+                    birth: '31. 10. 1739, Nová Ves ',
+                    death: '',
+                    cause: '',
+                    occupation:'',
+                    marriage: '10. 11. 1765, Nová Ves',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3203/88/1359/1263/71/0',
+                    linkMarriage: '',
+                    linkDeath: ''
+                },
+
+                   '6_25': {
+                    name: 'Marie Anna Hanusová',
+                    birth: '2. 9. 1748, Nová Ves',
+                    death: '',
+                    cause: '',
+                    occupation:'',
+                    marriage: '10. 11. 1765, Nová Ves',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3203/103/1324/1223/150/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3215/57/950/922/126/0',
+                    linkDeath: ''
+                },
+
+                   '6_26': {
+                    name: 'Josef Kovařík',
+                    birth: '13. 3. 1769, Nová Ves',
+                    death: '9. 5. 1799, Nová Ves 6',
+                    cause: 'vodnatelnost',
+                    occupation:'',
+                    marriage: '7. 2. 1790, Nová Ves',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3204/55/1289/1536/71/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3216/23/2724/792/80/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3220/35/1093/1944/132/0'
+                },
+
+                   '6_27': {
+                    name: 'Anna Kenická',
+                    birth: '4. 4. 1766, Nová Ves',
+                    death: '',
+                    cause: '',
+                    occupation:'',
+                    marriage: '7. 2. 1790, Nová Ves',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3204/43/1185/2304/84/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3216/23/2724/792/80/0',
+                    linkDeath: ''
+                },
+
+                 '6_28': {
+                    name: 'Josef Dolíška',
+                    birth: '1. 2. 1756, Dražov',
+                    death: '',
+                    cause: '',
+                    occupation:'',
+                    marriage: '6. 10. 1776, Víska',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3203/128/1111/725/150/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3215/69/2524/2581/97/0',
+                    linkDeath: ''
+                },
+
+                 '6_29': {
+                    name: 'Anna Motlová',
+                    birth: 'okolo 1760',
+                    death: '15.2.1801',
+                    cause: '',
+                    occupation:'',
+                    marriage: '6. 10. 1776, Víska',
+                    linkBirth: '',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/3215/69/2524/2581/97/0',
+                    linkDeath: ''
+                },
+
+                   '6_30': {
+                    name: 'Josef Janout',
+                    birth: '12. 2. 1765, Nová Ves',
+                    death: '27. 7. 1814, Nová Ves 3',
+                    cause: '',
+                    occupation:'',
+                    marriage: '22. 2. 1789, Hoslovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/3204/37',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/2965/44/1113/2821/84/0',
+                    linkDeath: 'https://digi.ceskearchivy.cz/3221/60/957/2003/150/0'
+                },
+
+                   '6_31': {
+                    name: 'Anna Žipková',
+                    birth: '7. 7. 1768, Hoslovice',
+                    death: '',
+                    cause: '',
+                    occupation:'',
+                    marriage: '22. 2. 1789, Hoslovice',
+                    linkBirth: 'https://digi.ceskearchivy.cz/2950/27/2454/1565/147/0',
+                    linkMarriage: 'https://digi.ceskearchivy.cz/2965/44/1113/2821/84/0',
+                    linkDeath: ''
+                }
+            };
+            
+            // Popisky (jména) pro buňky
+            const labels = {};
+            for (const key in ancestorData) {
+                if(ancestorData[key]) labels[key] = ancestorData[key].name;
+            }
+            
+            // --- Reference na modální okno a jeho prvky (beze změny) ---
+            const modal = document.getElementById('person-modal');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalName = document.getElementById('modal-name');
+            
+            const modalBirth = document.getElementById('modal-birth');
+            const modalMarriage = document.getElementById('modal-marriage');
+            const modalDeath = document.getElementById('modal-death');
+            const modalCause = document.getElementById('modal-cause');
+            const modalOccupation = document.getElementById('modal-occupation');
+            const modalNote = document.getElementById('modal-note');
+            
+            const modalLinkBirth = document.getElementById('modal-link-birth');
+            const modalLinkMarriage = document.getElementById('modal-link-marriage');
+            const modalLinkDeath = document.getElementById('modal-link-death');
+
+            // --- Formátování data do češtiny (beze změny) ---
+            const czechMonths = [
+                'ledna', 'února', 'března', 'dubna', 'května', 'června',
+                'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'
+            ];
+
+            function formatCzechDate(dateString) {
+                if (!dateString) {
+                    return null;
+                }
+                const match = dateString.match(/^(\d{1,2})\. *(\d{1,2})\. *(\d{4})(.*)$/);
+
+                if (match) {
+                    const day = match[1];
+                    const monthIndex = parseInt(match[2], 10) - 1; 
+                    const year = match[3];
+                    const rest = match[4]; 
+
+                    if (monthIndex >= 0 && monthIndex < 12) {
+                        const monthName = czechMonths[monthIndex];
+                        return `${day}. ${monthName} ${year}${rest}`;
+                    }
+                }
+                return dateString;
+            }
+
+            // --- Funkce modálního okna (beze změny) ---
+            function updateModalRow(spanElement, value) {
+                const rowElement = spanElement.parentElement; 
+                if (value) {
+                    spanElement.textContent = value;
+                    rowElement.style.display = 'block'; 
+                } else {
+                    spanElement.textContent = ''; 
+                    rowElement.style.display = 'none';  
+                }
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+            }
+            modalCloseBtn.onclick = closeModal;
+            modal.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+            
+            function showModal(key) {
+                const data = ancestorData[key];
+                
+                if (data) {
+                    modalName.textContent = data.name;
+                    updateModalRow(modalBirth, formatCzechDate(data.birth));
+                    updateModalRow(modalMarriage, formatCzechDate(data.marriage));
+                    updateModalRow(modalDeath, formatCzechDate(data.death));
+                    updateModalRow(modalCause, data.cause);
+                    updateModalRow(modalOccupation, data.occupation);
+                    updateModalRow(modalNote, data.note); 
+                    
+                    setButtonLink(modalLinkBirth, data.linkBirth);
+                    setButtonLink(modalLinkMarriage, data.linkMarriage);
+                    setButtonLink(modalLinkDeath, data.linkDeath);
+
+                } else {
+                    modalName.textContent = `Předek (Gen ${key.split('_')[0]}, Index ${key.split('_')[1]})`;
+                    updateModalRow(modalBirth, null);
+                    updateModalRow(modalMarriage, null);
+                    updateModalRow(modalDeath, null);
+                    updateModalRow(modalCause, null);
+                    updateModalRow(modalOccupation, null);
+                    updateModalRow(modalNote, null);
+                    
+                    setButtonLink(modalLinkBirth, null);
+                    setButtonLink(modalLinkMarriage, null);
+                    setButtonLink(modalLinkDeath, null);
+                }
+                
+                modal.classList.add('active'); 
+            }
+            
+            function setButtonLink(button, href) {
+                if (href && href !== '#') {
+                    button.href = href;
+                    button.classList.remove('disabled');
+                    button.removeAttribute('aria-disabled');
+                    button.style.display = 'inline-block'; 
+                } else {
+                    button.href = '#'; 
+                    button.classList.add('disabled');
+                    button.setAttribute('aria-disabled', 'true');
+                    button.style.display = 'none'; 
+                }
+            }
+
+            // --- Helper funkce (beze změny) ---
+            function polarToCartesian(cx, cy, radius, angleInDegrees) {
+                const angleInRadians = (angleInDegrees) * Math.PI / 180.0;
+                return {
+                    x: cx + (radius * Math.cos(angleInRadians)),
+                    y: cy + (radius * Math.sin(angleInRadians))
+                };
+            }
+
+            function describeArcSector(x, y, innerRadius, outerRadius, startAngle, endAngle) {
+                const startOuter = polarToCartesian(x, y, outerRadius, endAngle);
+                const endOuter = polarToCartesian(x, y, outerRadius, startAngle);
+                const startInner = polarToCartesian(x, y, innerRadius, endAngle);
+                const endInner = polarToCartesian(x, y, innerRadius, startAngle);
+                const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+                const d = [
+                    "M", startOuter.x, startOuter.y, 
+                    "A", outerRadius, outerRadius, 0, largeArcFlag, 0, endOuter.x, endOuter.y,
+                    "L", endInner.x, endInner.y,     
+                    "A", innerRadius, innerRadius, 0, largeArcFlag, 1, startInner.x, startInner.y,
+                    "Z"
+                ].join(" ");
+                return d;
+            }
+
+            
+                
+                            // --- AKTUALIZOVANÁ FUNKCE PRO TŘÍŘÁDKOVÉ ZALAMOVÁNÍ ---
+            function createTextLabel(text, gen, midAngle, midRadius) {
+                const textPos = polarToCartesian(centerX, centerY, midRadius, midAngle); 
+                
+                const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                textEl.setAttribute("x", textPos.x);
+                textEl.setAttribute("y", textPos.y);
+
+                // Otáčení textu (logika zůstává beze změny)
+                let textAngle = midAngle - 90; 
+                if (gen === 1) {
+                    textAngle = 0;
+                }
+                
+                textEl.setAttribute("transform", `rotate(${textAngle}, ${textPos.x}, ${textPos.y})`);
+                textEl.style.textAnchor = "middle"; 
+
+                textEl.classList.add("ancestor-text");
+                
+                // Zmenšení písma pro vnější generace (zachováno)
+                if (gen > 4) textEl.style.fontSize = "12px";
+                if (gen > 5) textEl.style.fontSize = "10px";
+                
+                // --- NOVÁ LOGIKA TŘÍ ŘÁDKŮ ---
+                const parts = text.split(/\s+/); 
+                
+                if (parts.length >= 3) {
+                    const line1 = parts[0];             // První jméno
+                    const line2 = parts[1];             // Druhé jméno
+                    const line3 = parts.slice(2).join(' '); // Zbytek (Příjmení/Více příjmení)
+                    
+                    // --- 1. ŘÁDEK (NEJVÝŠE) ---
+                    const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                    tspan1.textContent = line1;
+                    // Posun nahoru o 1 řádek, aby byl text centrován symetricky
+                    tspan1.setAttribute('dy', '-1em'); 
+                    tspan1.setAttribute('x', textPos.x);
+                    textEl.appendChild(tspan1);
+
+                    // --- 2. ŘÁDEK (STŘED) ---
+                    const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                    tspan2.textContent = line2;
+                    // Posun dolů o 1 řádek od předchozího, čímž se vrací do středu
+                    tspan2.setAttribute('dy', '1em'); 
+                    tspan2.setAttribute('x', textPos.x); 
+                    textEl.appendChild(tspan2);
+                    
+                    // --- 3. ŘÁDEK (NEJSPODNĚJI) ---
+                    const tspan3 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                    tspan3.textContent = line3;
+                    // Posun dolů o 1 řádek od předchozího
+                    tspan3.setAttribute('dy', '1em'); 
+                    tspan3.setAttribute('x', textPos.x); 
+                    textEl.appendChild(tspan3);
+
+                } else {
+                    // Původní logika pro 1 nebo 2 slova (zachování 2 řádků, nebo bez zalamování)
+                    
+                    if (parts.length === 2) {
+                        const line1 = parts[0];
+                        const line2 = parts[1];
+                        
+                        // Nová (více symetrické centrování):
+                        const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                        tspan1.textContent = line1;
+                        // Posun nahoru o 0.5 řádku (centrováno uprostřed dvou řádků)
+                        tspan1.setAttribute('dy', '-0.5em'); 
+                        tspan1.setAttribute('x', textPos.x);
+                        textEl.appendChild(tspan1);
+
+                        const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                        tspan2.textContent = line2;
+                        tspan2.setAttribute('x', textPos.x); 
+                        // Posun dolů o 1 řádek od předchozího (-0.5 + 1.0 = +0.5, stále centrováno)
+                        tspan2.setAttribute('dy', '1em'); 
+                        textEl.appendChild(tspan2);
+                    } else {
+                        // Jen jedno slovo, nezalamujeme
+                         textEl.textContent = text;
+                    }
+                }
+
+                return textEl;
+        }
+                
+
+
+            // --- Hlavní smyčka pro generování (beze změny) ---
+            const totalAngle = 180; 
+            for (let gen = 1; gen <= generations; gen++) {
+                const numAncestors = Math.pow(2, gen - 1); 
+                const angleSlice = totalAngle / numAncestors; 
+                const innerR = radii[gen - 1];
+                const outerR = radii[gen];
+
+                for (let i = 0; i < numAncestors; i++) {
+                    const startAngle = i * angleSlice;
+                    const endAngle = (i + 1) * angleSlice;
+                    
+                    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    const d = describeArcSector(centerX, centerY, innerR, outerR, startAngle, endAngle);
+                    path.setAttribute("d", d);
+                    path.classList.add("ancestor-cell");
+
+                    const midAngle = startAngle + (angleSlice / 2);
+                    const midRadius = innerR + (outerR - innerR) / 2;
+                    
+                    const labelKey = `${gen}_${i}`;
+                    const textContent = labels[labelKey] || `Předek ${gen}-${i}`; 
+                    const textEl = createTextLabel(textContent, gen, midAngle, midRadius);
+                    
+                    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    g.classList.add(`gen-${gen}`, 'ancestor-group'); 
+                    g.appendChild(path);
+                    g.appendChild(textEl);
+                    
+                    g.addEventListener('click', function() {
+                        showModal(labelKey); 
+                    });
+                    
+                    svg.appendChild(g);
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
+    
+     

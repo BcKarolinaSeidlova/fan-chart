@@ -16,12 +16,12 @@
 
 .container {
   height: 10dvh;
-  width: 100dvw;
+  width: 95dvw;
   display: grid;
   place-items: center;
 }
 
-ribbon {
+.ribbon {
   position: relative;
   text-align: center;
   background: var(--color-background);

@@ -4,14 +4,19 @@
 body {
 	display:flex;
 	flex-direction: column;
-	justify-content: flex-start;
 	background-color: #ebd9c6;
 	color: #683b05;
 	min-height: 98dvh;
 	font-family: "EB Garamond", Times, serif;
 }
 
-body :last-child {
+.section {
+   display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.section :last-child {
 	justify-content: flex-end;
 }
 
@@ -177,6 +182,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

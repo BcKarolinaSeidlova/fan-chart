@@ -3,6 +3,7 @@
 
 body {
 	display:flex;
+	flex-direction: column;
 	justify-content: space-between;
 	background-color: #ebd9c6;
 	color: #683b05;
@@ -172,6 +173,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

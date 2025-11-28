@@ -49,15 +49,15 @@ a {
 *
 */
 button {
-  font-family: "Times New Roman", Times, serif;
+  font-family: "EB Garamond", serif;
   color: #683B05;
-  font-size: 1em;
+  font-size: 1.2em;
   padding: 5px;
-  margin: 10px;
+  margin: 5px;
   border: 2px solid #C1A07C;
   border-radius: 20px;
   background-color: #ffeddb;
-  box-shadow: rgb(193, 160, 124) 0px 12px 12px;
+ /* box-shadow: rgb(193, 160, 124) 0px 12px 12px;*/
 }
 
 button:hover, button:active {
@@ -65,7 +65,7 @@ button:hover, button:active {
   background-color: #C1A07C;
   border-color: #ffeddb;
   color: #ffeddb;
-  box-shadow: rgb(193, 160, 124) 12px 0px 12px;
+ /* box-shadow: rgb(193, 160, 124) 12px 0px 12px;*/
 }
 
 /*
@@ -95,10 +95,11 @@ footer {
 	align-items: center;
 	background-color: #96734d;
 	color: #ebd9c6;
-	width: 100vw;
+	width: 95vw;
 }
 
 footer > p > a {
 	color: #ebd9c6;
 }
+
 

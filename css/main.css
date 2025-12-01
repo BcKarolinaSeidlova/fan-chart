@@ -8,7 +8,7 @@ body {
 	background-color: #ebd9c6;
 	color: #683b05;
 	font-family: "EB Garamond", serif;
-	min-height: 98vh;
+	min-height: 95vh;
 }
 
 section {
@@ -16,7 +16,6 @@ section {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
-	min-height: 97vh;
 }
 
 .content {
@@ -184,6 +183,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

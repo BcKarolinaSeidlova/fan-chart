@@ -1,5 +1,5 @@
 @media screen and (min-width: 900px) {
-main > div {
+.nabidka {
 	display: flex;
 	align-items: baseline;
 	width: 90%;
@@ -87,6 +87,7 @@ main > div {
 		width: 120px;
 	}
 }
+
 
 
 

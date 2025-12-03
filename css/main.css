@@ -79,9 +79,14 @@ button:hover, button:active {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
 }
 
+.nabidka {
+	display: flex;
+	align-items: baseline;
+	width: 90%;
+	justify-content: center;
+}
 
 /*
 *
@@ -174,6 +179,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

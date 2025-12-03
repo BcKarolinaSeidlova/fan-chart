@@ -8,85 +8,26 @@
 
 .header {
 	width: 98%;
-
-
 }
 
 
 @media screen and (max-width: 899px) {
-         button {
+        /* button {
 		  font-size: 1em;
 		  width: 150px;
 		  flex-grow: 1;
 		  margin-left: 3px;
 	  }
-
-	#Menu {
-		flex-wrap: wrap;
-		justify-content: center;
-		margin-top: 20px;
-	}
-
-	.list {
-		width: 98%;
-	}
-
-	.cely-text {
-		width: 95vw;
-	}
-	
-	.prev,
-	.next { height: 30px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		cursor: pointer;
-		position: absolute;
-		font-weight: bold;
-		font-size: 3em;
-		color: #ffeddb;
-		text-shadow: -1px 0 #683b05, 0 1px #683b05, 1px 0 #683b05, 0 -1px #683b05;
-	}
-
-	.next {
-	  right: 0.3em;
-	}
-
-	.prev {
-		left: 0.3em;
-	}
-
-	.nav-item-his {
-		font-size: 1.1em;
-	}
-
-	.foto-his {
-		width: 70vw;
-                height: auto;
-        }
-
-	.znak {
-	flex-wrap: wrap;
-	justify-content: center;
-	}
-
-	table,
-	.valka {
-		width: 85vw;
-	}
-
+*/
 }
 
 @media screen and (max-width: 530px) {
-
-	.nav-list-his, #Menu {
-		font-size: 0.8em; 
-	}
-
+	
 	button {
 		width: 120px;
 	}
 }
+
 
 
 

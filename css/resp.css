@@ -12,7 +12,11 @@
 
 
 @media screen and (max-width: 899px) {
-  button {
+   body {
+	   height: 95vh;
+   }
+	
+	button {
 		  font-size: 1em;
 		  width: 30vw;;
 		  flex-grow: 1;
@@ -30,6 +34,7 @@
 		width: 120px;
 	}
 }
+
 
 
 

@@ -12,13 +12,16 @@
 
 
 @media screen and (max-width: 899px) {
-        /* button {
+  button {
 		  font-size: 1em;
-		  width: 150px;
+		  width: 30vw;;
 		  flex-grow: 1;
 		  margin-left: 3px;
 	  }
-*/
+
+	.nabidka {
+		width: 90vw;
+	}
 }
 
 @media screen and (max-width: 530px) {
@@ -27,6 +30,7 @@
 		width: 120px;
 	}
 }
+
 
 
 

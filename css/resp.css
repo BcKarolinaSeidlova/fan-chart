@@ -13,7 +13,7 @@
 
 @media screen and (max-width: 899px) {
    body {
-	   height: 80%;
+	   height: 80vh
    }
 
    h2 {
@@ -38,6 +38,7 @@
 		width: 120px;
 	}
 }
+
 
 
 

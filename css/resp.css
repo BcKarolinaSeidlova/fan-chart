@@ -13,12 +13,16 @@
 
 @media screen and (max-width: 899px) {
    body {
-	   height: 80vh;
+	   height: 80%;
+   }
+
+   h2 {
+	   font-size: 80%;
    }
 	
 	button {
 		  font-size: 1em;
-		  width: 30vw;;
+		  width: 30vw;
 		  flex-grow: 1;
 		  margin-left: 3px;
 	  }
@@ -34,6 +38,7 @@
 		width: 120px;
 	}
 }
+
 
 
 

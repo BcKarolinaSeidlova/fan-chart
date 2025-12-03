@@ -11,12 +11,12 @@ body {
 	height: 98vh;
 }
 
-section {
+/*section {
    display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
-}
+}*/
 
 .content {
 	display: flex;
@@ -97,10 +97,8 @@ button:hover, button:active {
 
 footer {
 	margin-top: auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	display: block;
+	text-align: center;
 	background-color: #96734d;
 	color: #ebd9c6;
 	width: 98vw;
@@ -182,6 +180,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

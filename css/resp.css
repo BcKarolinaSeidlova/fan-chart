@@ -1,5 +1,9 @@
 @media screen and (min-width: 900px) {
-
+main > div {
+	display: flex;
+	align-items: baseline;
+	width: 90%;
+}
 
 .hamburger{
 	display: none;
@@ -49,7 +53,7 @@ h1 {
 	font-size: 1em;
 	padding: 5px;
 	margin-left: 0px;
-	width: 90%;
+	width: 30%;
 	}
 
 .nav-item {
@@ -62,7 +66,6 @@ h1 {
 
 
 .header {
-	max-height: 37px;
 	justify-content: center;
 }
 
@@ -218,5 +221,6 @@ tr:hover {
 		width: 120px;
 	}
 }
+
 
 

@@ -38,6 +38,10 @@ a {
 	color: #683b05;
 }
 
+p {
+	text-align: center;
+}
+
 /*
 *
 * HEADER
@@ -180,6 +184,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

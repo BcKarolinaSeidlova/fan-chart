@@ -19,6 +19,10 @@
             background-color: #f7f7f7;
             padding: 1rem;
         }
+
+        ul {
+            border: 2px black;
+        }
         /* Základní styl pro ikony Lucide */
         .lucide {
             width: 1.25rem;
@@ -39,340 +43,28 @@
             Kliknutím na ikonku <span class="lucide lucide-chevron-down inline-block align-text-bottom"></span> vedle jména muže zobrazíte jeho sourozence.
         </p>
 
-        <!-- Kontejner pro zobrazení stromu -->
-        <div id="treeContainer" class="flex flex-col items-center">
-            <!-- Strom se vygeneruje zde -->
-        </div>
+        <main>
+            <div>
+                <li>
+                    <ul>Manželka 1</ul>
+                    <ul> Muž 1</ul>
+                    <ul> sourozenec 1</ul>
+                    <ul> sourozenec 2</ul>
+                </li>
+
+                <li>
+                    <ul>Manželka 2</ul>
+                    <ul> Muž 2</ul>
+                    <ul> sourozenec 1</ul>
+                    <ul> sourozenec 2</ul>
+                </li>
+            </div>
+        </main>
     </div>
 
     <!-- Modul pro práci s Firebase a logikou aplikace -->
-    <script type="module">
-        // --- Zavedení povinných globálních proměnných pro Firebase ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        let app, db, auth;
-
-        // Inicializace Firebase (pro splnění požadavku)
-        if (Object.keys(firebaseConfig).length > 0) {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                if (initialAuthToken) {
-                    signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Chyba při inicializaci Firebase:", error);
-            }
-        }
-        // --- Konec povinného Firebase boilerplate ---
-
-        // Helper funkce pro formátování informací o osobě
-        function formatPersonDetails(person) {
-            let details = '';
-            
-            // Narození: (Year, Place)
-            const birthInfo = [person.birthYear, person.birthPlace].filter(Boolean).join(', ');
-            if (birthInfo) {
-                details += `N: ${birthInfo}`;
-            }
-
-            // Úmrtí: | (Year, Place)
-            const deathInfo = [person.deathYear, person.deathPlace].filter(Boolean).join(', ');
-            if (deathInfo) {
-                if (details) details += ' | ';
-                details += `Z: ${deathInfo}`;
-            }
-
-            return details;
-        }
-
-
-        // Data rodokmenu (nyní s polem 'occupation' pro muže)
-        const familyTreeData = [
-            // Generace 1 (Hlavní)
-            {
-                id: 'G1_P1',
-                name: 'Adam Novák (G1)',
-                birthYear: '1920',
-                deathYear: '1985',
-                birthPlace: 'Praha 1',
-                deathPlace: 'Brno',
-                occupation: 'Obchodník se dřevem', // Nové pole
-                gender: 'male',
-                children: ['G2_P1'], 
-                
-                spouse: {
-                    name: 'Eva Nováková',
-                    birthYear: '1925',
-                    deathYear: '2005',
-                    birthPlace: 'Plzeň',
-                    deathPlace: 'Brno',
-                    marriageYear: '1945' 
-                },
-                description: 'Zakladatel rodu v této linii.'
-            },
-            // Generace 2
-            {
-                id: 'G2_P1',
-                name: 'Jan Novák (G2)',
-                birthYear: '1948',
-                deathYear: '2015',
-                birthPlace: 'Brno',
-                deathPlace: 'Ostrava',
-                occupation: 'Strojní inženýr', // Nové pole
-                gender: 'male',
-                children: ['G3_P1'],
-                
-                spouse: {
-                    name: 'Kateřina Nováková',
-                    birthYear: '1950',
-                    birthPlace: 'Ostrava',
-                    marriageYear: '1970'
-                },
-
-                siblings: [
-                    { 
-                        id: 'G2_S1', 
-                        name: 'Marek Novák', 
-                        birthYear: '1952', 
-                        birthPlace: 'Brno', 
-                        occupation: 'Architekt', // Povolání u sourozence
-                        gender: 'male',
-                        spouse: { name: 'Lenka Nováková', birthYear: '1955', marriageYear: '1980' }
-                    },
-                    { 
-                        id: 'G2_S2', 
-                        name: 'Helena Svobodová (roz. Nováková)', 
-                        birthYear: '1958', 
-                        birthPlace: 'Brno', 
-                        gender: 'female',
-                        spouse: { name: 'David Svoboda', birthYear: '1957', occupation: 'Učitel', marriageYear: '1982' }
-                    },
-                ],
-                description: 'Vážený občan města.'
-            },
-            // Generace 3
-            {
-                id: 'G3_P1',
-                name: 'Filip Novák (G3)',
-                birthYear: '1975',
-                birthPlace: 'Ostrava',
-                occupation: 'Programátor', // Nové pole
-                gender: 'male',
-                children: [], 
-                
-                spouse: {
-                    name: 'Veronika Nováková',
-                    birthYear: '1978',
-                    birthPlace: 'Olomouc',
-                    marriageYear: '2000'
-                },
-
-                siblings: [
-                    { 
-                        id: 'G3_S1', 
-                        name: 'Lucie Krátká (roz. Nováková)', 
-                        birthYear: '1973', 
-                        birthPlace: 'Ostrava', 
-                        gender: 'female',
-                        spouse: { name: 'Karel Krátký', birthYear: '1970', occupation: 'Lékař', marriageYear: '1995' }
-                    },
-                    { 
-                        id: 'G3_S2', 
-                        name: 'David Novák', 
-                        birthYear: '1980', 
-                        birthPlace: 'Ostrava', 
-                        occupation: 'Finanční analytik', // Povolání u sourozence
-                        gender: 'male',
-                        spouse: { name: 'Anna Nováková', birthYear: '1985', marriageYear: '2010' }
-                    },
-                    { 
-                        id: 'G3_S3', 
-                        name: 'Zuzana Musilová (roz. Nováková)', 
-                        birthYear: '1985', 
-                        birthPlace: 'Ostrava', 
-                        gender: 'female',
-                        spouse: { name: 'Michal Musil', birthYear: '1983', occupation: 'Manažer', marriageYear: '2008' }
-                    },
-                ],
-                description: 'Současná generace.'
-            }
-        ];
-
-        // Funkce pro generování HTML karty pro osobu/pár
-        function createPersonCard(person, isMainPerson = false, isSibling = false) {
-            const card = document.createElement('div');
-            // Styl karty, který je responzivní a atraktivní
-            card.className = `p-3 rounded-xl shadow-lg transition duration-300 ease-in-out w-full max-w-sm mx-auto
-                              ${person.gender === 'male' ? 'bg-blue-50 border-blue-200' : 'bg-pink-50 border-pink-200'}
-                              ${isMainPerson ? 'border-4 border-indigo-500' : 'border-2'}
-                              ${isSibling ? 'hover:shadow-xl' : 'shadow-xl'}`;
-
-            const pairContainer = document.createElement('div');
-            pairContainer.className = 'flex flex-col space-y-1';
-
-            // --- HLAVNÍ OSOBA (Jméno, Povolání a životní data v jednom bloku) ---
-            const mainPersonDiv = document.createElement('div');
-            mainPersonDiv.className = 'text-sm font-bold text-gray-800 border-b border-dashed border-gray-300 pb-1';
-            mainPersonDiv.innerHTML = `
-                <div class="flex items-start">
-                    <span class="lucide lucide-user text-indigo-500 mr-1 mt-0.5"></span>
-                    <div class="flex-1 min-w-0">
-                        ${person.name}
-                        <span class="font-normal text-xs italic text-gray-600 block leading-tight">(${formatPersonDetails(person)})</span>
-                    </div>
-                </div>
-            `;
-            pairContainer.appendChild(mainPersonDiv);
-
-            // --- POVOLÁNÍ (u hlavního muže/sourozence muže) ---
-            if (person.occupation) {
-                const occupationDiv = document.createElement('p');
-                occupationDiv.className = 'text-xs font-semibold text-gray-700 pl-6 mt-1 flex items-center space-x-1';
-                occupationDiv.innerHTML = `<span class="lucide lucide-briefcase text-green-600"></span> <span>${person.occupation}</span>`;
-                pairContainer.appendChild(occupationDiv);
-            }
-
-
-            // --- PARTNER A SŇATEK ---
-            if (person.spouse) {
-                const spouse = person.spouse;
-                const spouseDetails = formatPersonDetails(spouse);
-                
-                const spouseDiv = document.createElement('div');
-                spouseDiv.className = 'pt-1 mt-1';
-                spouseDiv.innerHTML = `
-                    <div class="flex items-start space-x-2 text-sm font-semibold text-gray-700">
-                        <span class="lucide lucide-heart text-red-400 mr-1 mt-0.5"></span>
-                        <div class="flex-1 min-w-0">
-                            <span>${spouse.name}</span>
-                            <p class="text-xs text-gray-600 font-normal italic leading-tight">${spouseDetails ? `(${spouseDetails})` : ''}</p>
-                        </div>
-                    </div>
-                `;
-
-                // --- Povolání u partnera (pokud je definováno) ---
-                if (spouse.occupation) {
-                    spouseDiv.innerHTML += `
-                        <p class="text-xs font-normal text-gray-600 pl-6 mt-0.5 flex items-center space-x-1">
-                            <span class="lucide lucide-briefcase text-green-600"></span> <span>${spouse.occupation}</span>
-                        </p>
-                    `;
-                }
-
-                pairContainer.appendChild(spouseDiv);
-
-                // --- DATUM SŇATKU ---
-                if (spouse.marriageYear) {
-                    const marriageDiv = document.createElement('p');
-                    marriageDiv.className = 'text-xs italic text-gray-500 pt-1 mt-0.5 text-center bg-gray-100 rounded-full py-0.5 px-2 w-fit mx-auto';
-                    marriageDiv.innerHTML = `<span class="lucide lucide-users text-green-600 inline-block align-text-bottom mr-1"></span> Sňatek: ${spouse.marriageYear}`;
-                    pairContainer.appendChild(marriageDiv);
-                }
-            }
-
-
-            card.appendChild(pairContainer);
-
-            // Popisek / role
-            if (person.description && isMainPerson) {
-                 const desc = document.createElement('p');
-                 desc.className = 'text-xs text-gray-500 mt-2 italic border-t pt-2';
-                 desc.textContent = person.description;
-                 card.appendChild(desc);
-            }
-
-            return card;
-        }
-
-        // Funkce pro renderování generace a rekurzivní volání
-        function renderGeneration(generationData, index, container, isChildOfMain = true) {
-            if (!generationData) return;
-
-            const generationDiv = document.createElement('div');
-            generationDiv.className = `flex flex-col items-center w-full relative pt-10 sm:pt-12`;
-            
-            // Hlavní osoba generace
-            const mainPerson = generationData;
-            
-            const mainCardContainer = document.createElement('div');
-            mainCardContainer.className = 'relative flex flex-col items-center z-10 w-full';
-
-            const mainCard = createPersonCard(mainPerson, true);
-            mainCardContainer.appendChild(mainCard);
-            
-            // Tlačítko pro rozkliknutí sourozenců
-            if (mainPerson.siblings && mainPerson.siblings.length > 0) {
-                const toggleSiblingsBtn = document.createElement('button');
-                toggleSiblingsBtn.id = `toggle-siblings-${mainPerson.id}`;
-                toggleSiblingsBtn.className = 'mt-3 px-3 py-1 text-xs font-medium text-white bg-indigo-500 rounded-full shadow-lg hover:bg-indigo-600 transition flex items-center space-x-1';
-                toggleSiblingsBtn.innerHTML = `<span class="lucide lucide-chevron-down toggle-icon"></span> <span>Zobrazit sourozence (${mainPerson.siblings.length})</span>`;
-                mainCardContainer.appendChild(toggleSiblingsBtn);
-
-                // Kontejner pro sourozence (skrytý)
-                const siblingsContainer = document.createElement('div');
-                siblingsContainer.id = `siblings-of-${mainPerson.id}`;
-                siblingsContainer.className = 'hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 p-4 bg-gray-100 rounded-xl shadow-inner border border-gray-200 w-full max-w-4xl';
-
-                mainPerson.siblings.forEach(sibling => {
-                    const siblingCard = createPersonCard(sibling, false, true);
-                    siblingCard.className = siblingCard.className.replace('max-w-sm', 'max-w-full'); 
-                    siblingsContainer.appendChild(siblingCard);
-                });
-                mainCardContainer.appendChild(siblingsContainer);
-
-                // Logika pro přepínání zobrazení sourozenců
-                toggleSiblingsBtn.addEventListener('click', () => {
-                    siblingsContainer.classList.toggle('hidden');
-                    const icon = toggleSiblingsBtn.querySelector('.toggle-icon');
-                    const isHidden = siblingsContainer.classList.contains('hidden');
-                    
-                    icon.classList.toggle('lucide-chevron-down', isHidden);
-                    icon.classList.toggle('lucide-chevron-up', !isHidden);
-                    
-                    toggleSiblingsBtn.querySelector('span:last-child').textContent = isHidden 
-                        ? `Zobrazit sourozence (${mainPerson.siblings.length})` 
-                        : `Skrýt sourozence (${mainPerson.siblings.length})`;
-                    window.createIcons(); 
-                });
-            }
-
-            generationDiv.appendChild(mainCardContainer);
-            container.appendChild(generationDiv);
-
-            // Pokud má hlavní osoba potomky, rekurzivně voláme pro další generaci
-            if (mainPerson.children && mainPerson.children.length > 0) {
-                const connector = document.createElement('div');
-                connector.className = 'w-1 h-8 bg-indigo-300 rounded-b-full z-0';
-                generationDiv.appendChild(connector);
-
-                const nextPersonId = mainPerson.children[0];
-                const nextPersonData = familyTreeData.find(p => p.id === nextPersonId);
-                
-                renderGeneration(nextPersonData, index + 1, container, true);
-            }
-        }
-
-        // Spuštění renderování
-        document.addEventListener('DOMContentLoaded', () => {
-            const treeContainer = document.getElementById('treeContainer');
-            if (familyTreeData.length > 0) {
-                renderGeneration(familyTreeData[0], 0, treeContainer);
-            } else {
-                treeContainer.innerHTML = '<p class="text-gray-500 text-center">Data rodokmenu nejsou k dispozici.</p>';
-            }
-            window.createIcons();
-        });
+    <script>
+                   
 
     </script>
 </body>

@@ -26,11 +26,11 @@
 
         ul {
             border: 2px solid black;
-            margin: 10px;
+            padding: 10px;
             
         }
 
-        .gen1 {
+        #gen1 {
             display: none;
         }
         /* Základní styl pro ikony Lucide */
@@ -59,8 +59,10 @@
                     <ul>Manželka 1</ul>
                     <ul> Muž 1</ul>
                     <ul id="show1"> > </ul>
-                    <ul class="gen1"> sourozenec 1</ul>
-                    <ul class="gen1"> sourozenec 2</ul>
+                    <div id='gen1'>
+                    <ul> sourozenec 1</ul>
+                    <ul> sourozenec 2</ul>
+                    </div>
                 </li>
 
                 <li>
@@ -76,14 +78,15 @@
 
     <!-- Modul pro práci s Firebase a logikou aplikace -->
     <script>
-            var gen1 = document.getElementsByClassName('gen1');
+            var gen1 = document.getElementById('gen1');
             var show1 = document.getElementById('show1');
             show1.addEventListener('click', show1);
 
         function show1 () {
-           // for (let i = 0; i < gen1.length; i++) {
+           // 
+        //for (let i = 0; i < gen1.length; i++) {
 
-                gen1[i].style.display = 'flex';
+                gen1.style.display = 'flex';
                 
            // }
             

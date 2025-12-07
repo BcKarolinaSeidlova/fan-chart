@@ -12,76 +12,107 @@
         window.createIcons = createIcons;
     </script>
     <style>
-        /* Nastavení fontu Inter */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f7f7;
-            padding: 1rem;
-        }
-
-        li {
+        .generace {
             display: flex;
         }
 
-        ul {
+        .osoba {
             border: 2px solid black;
             padding: 15px;
-            margin: 10px;
-            height: 80px;
-            width: 170px;
+            margin-left: 10px;
+            min-height: 80px;
+            width: 200px;
             
         }
 
-        #gen1 {
+        #SG1 {
             display: none;
         }
-        /* Základní styl pro ikony Lucide */
-        .lucide {
-            width: 1.25rem;
-            height: 1.25rem;
-            stroke-width: 2.5;
-            flex-shrink: 0; 
-        }
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+.linie {
+  display: block;
+  border-right: 5px solid red;
+  width: 270px;
+  padding-top: 25px;
+  padding-bottom: 5px;
+  margin-bottom 0px;
+}
+
+button {
+  height: 50px;
+  align-self: center;
+  margin: 5px;
+}
+.svatba {
+  align-self: center;
+  border-bottom: 3px solid black;
+  width: 50px;
+}
+
+#muz1 {
+  margin-left: 0;
+}
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Hlavní kontejner aplikace -->
-    <div id="app" class="max-w-4xl mx-auto p-4 bg-white shadow-xl rounded-xl">
-        <h1 class="text-3xl font-extrabold text-center text-indigo-700 mb-6 border-b pb-2">
-            Rodokmen - Hlavní Mužská Linie
-        </h1>
-        <p class="text-center text-sm text-gray-600 mb-8">
-            Kliknutím na ikonku <span class="lucide lucide-chevron-down inline-block align-text-bottom"></span> vedle jména muže zobrazíte jeho sourozence.
-        </p>
-
-        <main>
-            <div>
-                <li>
-                    <ul>Manželka 1</ul>
-                    <ul> Muž 1</ul>
-                    <ul id="show1"> > </ul>
-                    <div id='gen1'>
-                    <ul> sourozenec 1</ul>
-                    <ul> sourozenec 2</ul>
+                        <div class="osoba"> sourozenec 1</div>
+                    <div class="osoba"> sourozenec 2</div>
                     </div>
-                </li>
-
-                <li>
-                    <ul>Manželka 2</ul>
-                    <ul> Muž 2</ul>
-                    <ul class="show2"> > </ul>
-                    <ul class="gen2"> sourozenec 1</ul>
-                    <ul class="gen2"> sourozenec 2</ul>
-                </li>
             </div>
-        </main>
-    </div>
+      <div class="linie">2. generace</div>
+      
+      <div class="generace">
+
+              
+
+                    <div class="osoba">Manželka 1</br> 1879 - 1937</div>
+                    <div class='svatba'> </div>
+
+                    <div class="osoba"> Muž 1</div>
+
+                    <button id="show1"> > </button>
+
+                    <div id='SG1'>
+
+                    <div class="osoba"> sourozenec 1</div>
+
+                    <div class="osoba"> sourozenec 2</div>
+
+                    </div>
+
+            </div>
+<div class='linie'> 3. generace</div>
+  
+  <div class="generace">
+
+              
+
+                    <div class="osoba">Manželka 1</br> 1879 - 1937</div>
+
+                    <div class="osoba"> Muž 1</div>
+
+                    <button id="show1"> > </button>
+
+                    <div id='SG1'>
+
+                        <div class="osoba"> sourozenec 1</div>
+
+                    <div class="osoba"> sourozenec 2</div>
+
+                    </div>
+
+  </div>
+                        
 
     <!-- Modul pro práci s Firebase a logikou aplikace -->
     <script>
-            var gen1 = document.getElementById('gen1');
+            var gen1 = document.getElementById('SG1');
             var show1 = document.getElementById('show1');
             show1.addEventListener('click', showgen1);
 
@@ -91,8 +122,7 @@
                  gen1.style.display = 'flex';
              }
             else {gen1.style.display = 'none'}
-        }
-
+                }
     </script>
 </body>
 </html>

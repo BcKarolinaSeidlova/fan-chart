@@ -43,7 +43,7 @@ main {
 .linie {
   display: block;
   border-right: 5px solid #683b05;
-  width: 400px;
+  width: 75%;
   padding-top: 25px;
   padding-bottom: 5px;
   margin-bottom: 0px;
@@ -58,6 +58,12 @@ button {
   color: #683b05;
   background-color: #f2e6d9;
 }
+.hlavni {
+	display: flex;
+	flex-direction: column;
+	min-width: 500px;
+}
+		
 .svatba {
   align-self: center;
   border-bottom: 3px solid #683b05;
@@ -66,7 +72,7 @@ button {
 
 .par {
 	display: flex;
-    min-width: 550px;
+    width:100%;
 }
 
 .muz {
@@ -80,19 +86,22 @@ button {
     <main>
             <p>1. generace</p>
             <div class="generace">
+			<div class="hlavni">
               <div class="par">
                     <div class="osoba">
                       Magdalena Formánková </br> 
                       1879 - 1937 </br>
                       sňatek 10.12.1906
                     </div>
-          <div class="svatba"></div>
+                    <div class="svatba"></div>
                     <div class="osoba muz"> 
                     Alexander Tureček </br>
                       1875 - 1932 </br>
                       rolník v Topolné 
                     </div>
               </div>
+			<div class="linie">2. generace</div>
+			</div>
                     <button id="show1"> > </button>
                     <div id='SG1'>
 
@@ -104,7 +113,6 @@ button {
 					<div class="osoba"> sourozenec 6</div>
                     </div>
             </div>
-      <div class="linie">2. generace</div>
       <div class="generace">
            <div class="par">
                     <div class="osoba">Manželka 1</br> 1879 - 1937</div>

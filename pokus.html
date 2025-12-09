@@ -40,7 +40,7 @@
 			border-radius: 20px;
 		}
 
-        .sourozenci {
+        .sourozenci, .nevlastni {
             display: none;
 			height: 75%;
 			margin-right: 15px;
@@ -119,11 +119,11 @@ main {
                       <p>1917 — 1991 </p>
                       <p>vyučil se mlynářem</p>
                     </div>
-				  <button class="button"> > </button>
+				  
               </div>
 			<div class="linie">2. generace</div>
 			</div>
-                    
+                    <button class="button"> > </button>
                     <div class='sourozenci'>
 
                     <div class="osoba"> 
@@ -171,9 +171,9 @@ main {
 					</div>
 
 					<div>Nevlastní sourozenci – matka Marie Urbanová
-					<button class="button"> ⟩ </button></div>
+					<button class="nev-button"> > </button></div>
 
-			        <div class="sourozenci">
+			        <div class="nevlastni sourozenci">
                     <div class="osoba">
 						<h4>František Lenz</h4>
 						<p> 1895 — ??</p>
@@ -364,6 +364,21 @@ toggleButtons.forEach(button => {
     button.addEventListener('click', function(event) {
         const parent = event.currentTarget.closest('.generace');
         const content = parent.querySelector('.sourozenci');
+        
+        // Přepne třídu 'is-visible' na elementu s obsahem
+        // Pokud třída je, odebere ji. Pokud není, přidá ji.
+        if (content) {
+            content.classList.toggle('is-visible');
+        }
+    });
+});
+
+const toggleButtonsNev = document.querySelectorAll('.nev-button');
+
+toggleButtonsNev.forEach(button => {
+    button.addEventListener('click', function(event) {
+        const parent = event.currentTarget.closest('.generace');
+        const content = parent.querySelector('.nevlastni');
         
         // Přepne třídu 'is-visible' na elementu s obsahem
         // Pokud třída je, odebere ji. Pokud není, přidá ji.

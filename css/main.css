@@ -52,7 +52,7 @@ p {
 *NAVIGACE
 *
 */
-button {
+.button {
   width: 30%;
   font-family: "EB Garamond", serif;
   color: #683B05;
@@ -64,7 +64,7 @@ button {
  /* box-shadow: rgb(193, 160, 124) 0px 12px 12px;*/
 }
 
-button:hover, button:active {
+.button:hover, .button:active {
   font-weight: bold;
   background-color: #C1A07C;
   border-color: #ffeddb;
@@ -181,6 +181,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

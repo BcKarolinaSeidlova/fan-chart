@@ -77,7 +77,7 @@ main {
   margin-bottom: 0px;
 }
 
-.button, .nev-button {
+.sipka, .nev-sipka {
   height: 50px;
   font-size: 30px;
   margin: 5px;
@@ -88,7 +88,7 @@ main {
   align-self: center;
 }
 
-.button :hover {
+.sipka :hover {
 	color: #f2e6d9;
 	background-color: #683b05;
 }
@@ -155,7 +155,7 @@ main {
               </div>
 			<div class="linie">2. generace</div>
 			</div>
-                    <button class="button"> <i class='fas fa-arrow-circle-right'></i></button>
+                    <button class="sipka"> <i class='fas fa-arrow-circle-right'></i></button>
                     <div class='sourozenci'>
 
                     <div class="osoba"> 
@@ -194,7 +194,7 @@ main {
 			  <div class="linie">3. generace</div>
 		  </div>
 
-                    <button class="button"> > </button>
+                    <button class="sipka"> > </button>
                     <div class='sourozenci'>
                     <div class="osoba zena"> 
 					<h4>Marie Lenzová </h4>
@@ -204,7 +204,7 @@ main {
 
 					<div class="matka">
 						<p>Nevlastní sourozenci – matka Marie Urbanová </p>
-					    <button class="nev-button"> > </button>
+					    <button class="nev-sipka"> > </button>
 					</div>
 
 			        <div class="nevlastni sourozenci">
@@ -243,7 +243,7 @@ main {
 			<div class="linie">4. generace</div>
 		</div>
 	  
-                    <button class="button"> > </button>
+                    <button class="sipka"> > </button>
 
                     <div class='sourozenci'>
 
@@ -279,7 +279,7 @@ main {
 			<div class="linie">5. generace</div>
 		</div>
 	  
-                    <button class="button"> > </button>
+                    <button class="sipka"> > </button>
 
                     <div class='sourozenci'>
 
@@ -320,7 +320,7 @@ main {
 			  <div class="linie">6. generace</div>
 		  </div>
 
-                    <button class="button"> > </button>
+                    <button class="sipka"> > </button>
                     <div class='sourozenci'>
                     <div class="osoba zena">
 						<h4>Marie Anna Lenzová </h4>
@@ -356,7 +356,7 @@ main {
 			  <div class="linie">7. generace</div>
 		  </div>
 
-                    <button class="button"> > </button>
+                    <button class="sipka"> > </button>
                     <div class='sourozenci'>
                     <div class="osoba"> 
 					<h4> </h4></div>
@@ -392,7 +392,7 @@ main {
 
     <!-- Modul pro práci s Firebase a logikou aplikace -->
     <script>
-		const toggleButtons = document.querySelectorAll('.button');
+		const toggleButtons = document.querySelectorAll('.sipka');
 
 toggleButtons.forEach(button => {
     button.addEventListener('click', function(event) {
@@ -407,7 +407,7 @@ toggleButtons.forEach(button => {
     });
 });
 
-const toggleButtonsNev = document.querySelectorAll('.nev-button');
+const toggleButtonsNev = document.querySelectorAll('.nev-sipka');
 
 toggleButtonsNev.forEach(button => {
     button.addEventListener('click', function(event) {

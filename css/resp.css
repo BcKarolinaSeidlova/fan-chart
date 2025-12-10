@@ -20,7 +20,7 @@
 	   font-size: 80%;
    }
 	
-	button {
+	.button {
 		  font-size: 1em;
 		  width: 30vw;
 		  flex-grow: 1;
@@ -34,10 +34,11 @@
 
 @media screen and (max-width: 530px) {
 	
-	button {
+	.button {
 		width: 120px;
 	}
 }
+
 
 
 

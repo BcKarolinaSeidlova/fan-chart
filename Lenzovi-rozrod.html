@@ -407,12 +407,21 @@ toggleButtons.forEach(button => {
     button.addEventListener('click', function(event) {
         const parent = event.currentTarget.closest('.generace');
         const content = parent.querySelector('.sourozenci');
+		const icon = event.currentTarget.querySelector('i');
         
         // Přepne třídu 'is-visible' na elementu s obsahem
         // Pokud třída je, odebere ji. Pokud není, přidá ji.
         if (content) {
             content.classList.toggle('is-visible');
         }
+
+		if (icon) {
+            if (icon.classList.contains('fa-chevron-right')) {
+                icon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            } else {
+                icon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            }
+		}
     });
 });
 

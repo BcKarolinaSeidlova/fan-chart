@@ -84,8 +84,15 @@ main {
 }
 
 .sipka i, .nev-sipka i {
-	font-size: 30px;
-	color: red;
+    font-size: 30px;
+    
+    /* Vynucení fontu Font Awesome */
+    font-family: 'Font Awesome 5 Free'; 
+    font-weight: 900; /* Pro 'fas' (Solid) je potřeba váha 900 */
+
+    /* Volitelné, ale užitečné pro zarovnání */
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .sipka:hover {

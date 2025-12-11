@@ -20,20 +20,16 @@
         }
 
 		header, footer {
-			width: 100%;
+			width: 99%;
 		}
 
 		.uvod {
-			width: 100%;
-		}
-
-		h4, p {
-			margin: 0px;
+			width: 99%;
 		}
 
 		.rozrod {
 			margin-top: 10px;
-			margin-bottom: 10px;
+			margin-bottom: 25px;
 		}
         
         .generace {
@@ -46,10 +42,13 @@
             padding: 10px;
             margin-left: 10px;
             width: 150px;
-			min-height: min-content;
-			background-color: #f2e6d9;
-            
+			height: min-content;
+			background-color: #f2e6d9;    
         }
+
+		.osoba>h4, .osoba>p{
+			margin: 0;
+		}
 
 		.zena {
 			border-radius: 20px;
@@ -72,10 +71,18 @@ main {
   flex-direction: column;
 }
 
+.1G {
+	width: 300px;
+	padding-right: 20px;
+	text-align: right;
+	font-size: 25px;
+	
+}
+
 .linie {
   display: block;
   border-right: 5px solid #96734d;
-  width: 65%;
+  width: 300px;
   padding-top: 25px;
   padding-bottom: 5px;
   padding-right: 15px;
@@ -84,7 +91,7 @@ main {
 }
 
 .linie p {
-font-size: 20px;
+font-size: 25px;
 }
 
 .sipka, .nev-sipka {
@@ -152,10 +159,9 @@ font-size: 20px;
 	<p>Rozrod představuje přehled předků určitého příjmení v přímé linii a také jejich potomky nesoucí toto příjmení. Z důvodu zachování přehlednosti jsou zaznamenáni pouze sourozenci přímého předka a už ne jejich děti, vnoučata... Sourozence zobrazíte kliknutím na tlačítko se šipkou ></p>
 		</div>
 		<div class="rozrod">
-
+            <p class="1G">1. generace</p>
             <div class="generace">
 			<div class="hlavni">
-				<p> 1. generace</p>
               <div class="par">
                     <div class="osoba zena">
                       <h4>Anna Krulišová</h4>

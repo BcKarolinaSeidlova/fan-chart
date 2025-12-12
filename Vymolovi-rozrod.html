@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+    <title> Rozrod rodu Lenzů </title>
+	
+    <link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/resp.css">
+	<link rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+      integrity="sha512-..." 
+      crossorigin="anonymous" 
+      referrerpolicy="no-referrer" />
+    <style>
+        body {
+	         min-width: min-content;
+			padding: 20px;
+        }
+
+		header, footer {
+			width: 99%;
+		}
+
+		.uvod {
+			width: 99%;
+		}
+
+		.rozrod {
+			margin-top: 10px;
+			margin-bottom: 25px;
+		}
+        
+        .generace {
+            display: flex;
+			align-items: flex-start;
+        }
+
+        .osoba {
+            border: 2px solid #96734d;
+            padding: 10px;
+            margin-left: 10px;
+            width: 150px;
+			min-height: 75px;
+			background-color: #f2e6d9;    
+        }
+
+		.osoba>h4, .osoba>p{
+			margin: 0;
+		}
+
+		.zena {
+			border-radius: 20px;
+		}
+
+        .sourozenci, .nevlastni {
+            display: none;
+			margin-right: 15px;
+        }
+
+		.matka {
+			padding: 15px;
+            margin-left: 10px;
+            min-height: 40px;
+            width: 200px;
+		}
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+.1G {
+	width: 300px;
+	padding-right: 20px;
+	text-align: right;
+	font-size: 25px;
+	
+}
+
+.linie {
+  display: block;
+  border-right: 5px solid #96734d;
+  width: 300px;
+  padding-top: 25px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+  margin-bottom: 0px;
+  text-align: right;
+}
+
+.linie p {
+font-size: 25px;
+}
+
+.sipka, .nev-sipka {
+  line-height: 0;
+  margin: 5px;
+  border: 5px solid #96734d;
+  border-radius: 35px;
+  color: #96734d;
+  background-color: #f2e6d9;
+ align-self: center;
+}
+
+.sipka i, .nev-sipka i {
+    font-size: 30px; 
+    color: #96734d;
+}
+
+.sipka:hover, .sipka i:hover {
+	color: #f2e6d9;
+	background-color: #96734d;
+}
+		
+.hlavni {
+	display: flex;
+	flex-direction: column;
+	min-width: 450px;
+}
+		
+.svatba {
+  align-self: center;
+  border-bottom: 3px solid #96734d;
+  width: 50px;
+}
+
+.dalsi {
+	
+}
+
+.par {
+	display: flex;
+    width:100%;
+}
+
+.muz {
+  margin-left: 0;
+  border: 4px solid #96734d;
+}
+
+.is-visible {
+	display:flex;
+}
+    </style>
+</head>
+<body>
+	<header><div class="container">
+           <div class="ribbon">
+              <div class="ribbon-content">
+                 Rodokmeny od Karolíny
+             </div>
+           </div>
+	</div> </header>
+	<main>
+		<div class="uvod">
+    <h1>Rozrod rodu Lenzů </h1>
+	<p>Rozrod představuje přehled předků určitého příjmení v přímé linii a také jejich potomky nesoucí toto příjmení. Z důvodu zachování přehlednosti jsou zaznamenáni pouze sourozenci přímého předka a už ne jejich děti, vnoučata... Sourozence zobrazíte kliknutím na tlačítko se šipkou ></p>
+		</div>
+		<div class="rozrod">
+            <p class="1G">1. generace</p>
+            <div class="generace">
+			<div class="hlavni">
+              <div class="par">
+                    <div class="osoba zena">
+                      <h4>Anna Krulišová</h4>
+                      <p>1923 — 1986 </p>
+                      <p> sňatek ?? </p>
+                    </div>
+                    <div class="svatba"></div>
+                    <div class="osoba muz"> 
+                      <h4>Karel Lenz </h4>
+                      <p>1917 — 1991 </p>
+                      <p>vyučil se mlynářem</p>
+                    </div>
+				  <button class="sipka"><i class='fas fa-chevron-right'></i></button>
+              </div>
+			<div class="linie">2. generace</div>
+			</div>
+                    <div class='sourozenci'>
+
+                    <div class="osoba"> 
+						<h4> Václav Lenz</h4>
+						<p> 1914 — 1932 </p>
+						<p> malířský učeň </p>
+						
+					</div>
+                    <div class="osoba zena">
+						<h4> Marie Lenzová </h4>
+						<p> 1919 — 2011 </p>
+						<p> provdaná Vacíková </p>
+					</div>
+                    <div class="osoba">
+						<h4> Jiří Lenz </h4>
+						<p> 1928 — 2024 </p>
+						
+					</div>
+                    </div>
+            </div>
+      <div class="generace">
+		  <div class="hlavni">
+           <div class="par">
+                    <div class="osoba zena">
+						<h4>Josefa Nová </h4>
+						<p>1889 — </p>
+						<p> sňatek 28. 12. 1914</p>
+					</div>
+                    <div class='svatba'> </div>
+                    <div class="osoba muz">
+						<h4>Václav Lenz </h4>
+						<p>1887 — ??</p>
+						<p> dělník, zedník</p>
+					</div>
+			   <button class="sipka"><i class='fas fa-chevron-right'></i></button>
+		   </div>
+			  <div class="linie">3. generace</div>
+		  </div>
+                    <div class='sourozenci'>
+                    <div class="osoba zena"> 
+					<h4>Marie Lenzová </h4>
+					<p>1886 — </p>
+					<p> nemanželská dcera Marie *1906</p>
+					</div>
+
+					<div class="matka">
+						<p>Nevlastní sourozenci – matka Marie Urbanová </p>
+					    <button class="nev-sipka"><i class='fas fa-chevron-right'></i></button>
+					</div>
+
+			        <div class="nevlastni sourozenci">
+                    <div class="osoba">
+						<h4>František Lenz</h4>
+						<p> 1895 — ??</p>
+					</div>
+
+					<div class="osoba">
+						<h4>Vojtěch Lenz</h4>
+						<p>1897 — ??</p>
+					</div>
+					<div class="osoba">
+						<h4>Adolf Lenz</h4>
+						<p> 1901 — ??</p>
+					</div>
+                    </div>
+					</div>
+
+            </div>
+	<div class="generace">
+        <div class="hlavni">
+              <div class="par">
+                    <div class="osoba zena">
+						<h4>Anna Němcová</h4>
+						<p>1864 — před 1895</p>
+						<p>sňatek 28. 7. 1885</p>
+					</div>
+				    <div class="svatba"></div>
+                    <div class="osoba muz"> 
+						<h4>Vojtěch Lenz</h4>
+						<p>1859 — ??</p>
+						<p> čeledín, hajný v Čepřovicích, šafář v Jiřeticích</p>
+					</div>
+				  <button class="sipka"><i class='fas fa-chevron-right'></i></button>
+			  </div>
+			<div class="linie">4. generace</div>
+		</div>
+
+                    <div class='sourozenci'>
+
+                    <div class="osoba">
+						<h4> František Lenz </h4>
+						<p>1862 — 1862 </p>
+					</div>
+
+                    <div class="osoba"> 
+					    <h4> František Lenz</h4>
+						<p>1863 — ??</p>
+					</div>
+					</div>
+	</div>
+  
+  <div class="generace">
+        <div class="hlavni">
+              <div class="par">
+                    <div class="osoba zena">
+						<h4>Marie Švíková</h4>
+						<p>1832 — ??</p>
+						<p>sňatek 28. 2. 1859</p>
+					</div>
+				    <div class="svatba"></div>
+                    <div class="osoba muz"> 
+						<h4>Josef Lenz</h4>
+						<p>1824 — ??</p>
+						<p> volák a služebný v panském dvoře v Milejovicích</p>
+					</div>
+				   <button class="sipka"><i class='fas fa-chevron-right'></i></button>
+			  </div>
+			<div class="linie">5. generace</div>
+		</div>
+	  
+
+                    <div class='sourozenci'>
+
+                    <div class="osoba zena">
+						<h4> Tereza Lenzová </h4>
+						<p>1815 — ??</p>
+					</div>
+
+                    <div class="osoba zena"> 
+					    <h4>Marie Lenzová </h4>
+						<p>1819 — ??</p>
+					</div>
+
+					<div class="osoba zena">
+						<h4>Rozálie Lenzová </h4>
+						<p> 1822 — 1822</p>
+					</div>
+
+                    </div>
+
+  </div>
+
+ <div class="generace">
+		  <div class="hlavni">
+           <div class="par">
+                    <div class="osoba zena">
+						<h4>Marie Magdalena Formánková</h4>
+						<p>1784 — 1832</p>
+						<p> sňatek 15. 11. 1814</p>
+					</div>
+                    <div class='svatba'> </div>
+                    <div class="osoba muz">
+						<h4>Ignác Lenz </h4>
+						<p>1776 — 1837</p>
+						<p>soukenický tovaryš ve Vlachově Březí</p>
+					</div>
+
+			   <button class="sipka"><i class='fas fa-chevron-right'></i></button>
+		   </div>
+			  <div class="linie">6. generace</div>
+		  </div>
+                    <div class='sourozenci'>
+                    <div class="osoba zena">
+						<h4>Marie Anna Lenzová </h4>
+						<p> 1771 — ??</p>
+					</div>
+					<div class="osoba">
+						<h4>Jan Nepomucký Lenz</h4>
+						<p>1774 — ??</p>
+					</div>
+					<div class="osoba zena">
+						<h4>Anna Marie Lenzová</h4>
+						<p>1779 — ??</p>
+					</div>
+                    </div>
+
+ </div>
+
+<div class="generace">
+		  <div class="hlavni">
+           <div class="par">
+                    <div class="osoba zena">
+						<h4> Dorota Ládová </h4>
+						<p>1739 — 1801</p>
+						<p>sňatek 5. 11. 1769</p>
+					</div>
+                    <div class='svatba'> </div>
+                    <div class="osoba muz">
+						<h4>Matěj Lenz </h4>
+						<p></p>
+						<p>krejčí ve Vlachově Březí</p>
+					</div>
+			  <!-- <button class="sipka"><i class='fas fa-chevron-right'></i></button> -->
+		   </div>
+			  <div class="linie">7. generace</div>
+		  </div>
+
+                    <div class='sourozenci'>
+                    <div class="osoba"> 
+					<h4> </h4></div>
+                    <div class="osoba"> </div>
+                    </div>
+
+</div>
+
+<div class="generace">
+		  <div class="hlavni">
+           <div class="par">
+                    <div class="osoba zena">
+						<h4> zatím neznámá</h4>
+						<p></p>
+						<p> </p>
+					</div>
+                    <div class='svatba'> </div>
+                    <div class="osoba muz">
+						<h4>Matěj Lenz </h4>
+						<p> ??</p>
+						<p>ovčák</p>
+					</div>
+		   </div>
+			  
+       </div>
+
+</div>             
+
+</div>
+</main>
+<footer class="footer"></footer>
+                        
+
+    <!-- Modul pro práci s Firebase a logikou aplikace -->
+    <script>
+		const toggleButtons = document.querySelectorAll('.sipka');
+
+toggleButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+        const parent = event.currentTarget.closest('.generace');
+        const content = parent.querySelector('.sourozenci');
+		const icon = event.currentTarget.querySelector('i');
+        
+        // Přepne třídu 'is-visible' na elementu s obsahem
+        // Pokud třída je, odebere ji. Pokud není, přidá ji.
+        if (content) {
+            content.classList.toggle('is-visible');
+        }
+
+		if (icon) {
+            if (icon.classList.contains('fa-chevron-right')) {
+                icon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            } else {
+                icon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            }
+		}
+    });
+});
+
+const toggleButtonsNev = document.querySelectorAll('.nev-sipka');
+
+toggleButtonsNev.forEach(button => {
+    button.addEventListener('click', function(event) {
+        const parent = event.currentTarget.closest('.generace');
+        const content = parent.querySelector('.nevlastni');
+        const icon = event.currentTarget.querySelector('i');
+        // Přepne třídu 'is-visible' na elementu s obsahem
+        // Pokud třída je, odebere ji. Pokud není, přidá ji.
+        if (content) {
+            content.classList.toggle('is-visible');
+        }
+
+		if (icon) {
+            if (icon.classList.contains('fa-chevron-right')) {
+                icon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            } else {
+                icon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            }
+			}
+    });
+});
+
+
+
+
+
+
+
+		
+            var gen1 = document.getElementById('SG1');
+            var show1 = document.getElementById('show1');
+            show1.addEventListener('click', showgen1);
+
+        function showgen1 () {
+
+             if   (gen1.style.display == 'none') {
+                 gen1.style.display = 'flex';
+             }
+            else {gen1.style.display = 'none'}
+                }
+    </script>
+</body>
+</html>
+

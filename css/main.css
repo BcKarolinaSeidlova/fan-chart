@@ -5,7 +5,7 @@ body {
 	display:flex;
 	flex-direction: column;
 	margin: 0;
-	height: 92vh;
+	height: 97,5vh;
 	background-color: #ebd9c6;
 	color: #683b05;
 	font-family: "EB Garamond", serif;
@@ -181,6 +181,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

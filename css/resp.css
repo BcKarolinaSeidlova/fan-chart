@@ -1,4 +1,7 @@
 @media screen and (min-width: 900px) {
+body {
+	font-size: 20px;
+}
 .nabidka {
 	display: flex;
 	align-items: baseline;
@@ -41,6 +44,7 @@
 		width: 120px;
 	}
 }
+
 
 
 

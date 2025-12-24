@@ -20,7 +20,7 @@ body {
 
 @media screen and (max-width: 899px) {
    body {
-	   height: 95vh
+	   height: 93vh
    }
 
    h2 {
@@ -44,6 +44,7 @@ body {
 		width: 120px;
 	}
 }
+
 
 
 

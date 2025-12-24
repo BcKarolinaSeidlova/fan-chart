@@ -5,11 +5,11 @@ body {
 	display:flex;
 	flex-direction: column;
 	margin: 0;
-	height: 98vh;
+	height: 96vh;
 	background-color: #ebd9c6;
 	color: #683b05;
 	font-family: "EB Garamond", serif;
-	/*text-align: center;*/
+	text-align: center;
 }
 
 .content {
@@ -30,7 +30,7 @@ a {
 }
 
 p {
-	/*text-align: center;*/
+	text-align: center;
 }
 
 /*
@@ -69,7 +69,6 @@ p {
   background-color: #C1A07C;
   border-color: #ffeddb;
   color: #ffeddb;
- /* box-shadow: rgb(193, 160, 124) 12px 0px 12px;*/
 }
 
 /*
@@ -81,7 +80,8 @@ p {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 10px;
+	padding: 20px;
+	text-align: justify;
 }
 
 .nabidka {
@@ -182,6 +182,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 

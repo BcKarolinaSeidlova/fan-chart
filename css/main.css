@@ -81,6 +81,7 @@ p {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	padding: 10px;
 }
 
 .nabidka {
@@ -181,6 +182,7 @@ footer > p > a {
   right: 0;
   border-width: 0.5rem 0.9rem 0 0;
 }
+
 
 
 
